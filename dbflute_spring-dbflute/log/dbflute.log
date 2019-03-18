@@ -1,0 +1,2049 @@
+2019-03-10 17:54:28,383 [main] INFO  (DfReplaceSchemaTask#begin():92) - +------------------------------------------+
+2019-03-10 17:54:28,387 [main] INFO  (DfReplaceSchemaTask#begin():93) - |                                          |
+2019-03-10 17:54:28,388 [main] INFO  (DfReplaceSchemaTask#begin():94) - |              ReplaceSchema               |
+2019-03-10 17:54:28,394 [main] INFO  (DfReplaceSchemaTask#begin():102) - |                                          |
+2019-03-10 17:54:28,394 [main] INFO  (DfReplaceSchemaTask#begin():103) - +------------------------------------------+
+2019-03-10 17:54:28,442 [main] INFO  (DfDataSourceHandler#prepare():78) - ...Preparing data source:
+2019-03-10 17:54:28,442 [main] INFO  (DfDataSourceHandler#prepare():79) -   driver = com.mysql.jdbc.Driver
+2019-03-10 17:54:28,443 [main] INFO  (DfDataSourceHandler#prepare():80) -   url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+2019-03-10 17:54:28,443 [main] INFO  (DfDataSourceHandler#prepare():81) -   user   = spring-dbflute-user
+2019-03-10 17:54:28,459 [main] INFO  (DfDataSourceHandler#createConnection():166) - ...Connecting to database by data source:
+2019-03-10 17:54:29,232 [main] INFO  (DfDataSourceHandler#setupConnectionMetaInfo():233) -   product = MySQL 5.7.12
+2019-03-10 17:54:29,233 [main] INFO  (DfDataSourceHandler#setupConnectionMetaInfo():234) -   driver  = MySQL Connector Java mysql-connector-java-5.1.46 ( Revision: 9cc87a48e75c2d2e87c1a293b2862ce651cb256e ) for JDBC 4.0
+2019-03-10 17:54:29,303 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():229) - 
+2019-03-10 17:54:29,304 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():230) - * * * * * * * * * * *
+2019-03-10 17:54:29,305 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():231) - *                   *
+2019-03-10 17:54:29,306 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():232) - * Initialize Schema *
+2019-03-10 17:54:29,309 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():233) - *                   *
+2019-03-10 17:54:29,310 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():234) - * * * * * * * * * * *
+2019-03-10 17:54:29,343 [main] INFO  (DfTableExtractor#doGetTableList():66) - ...Getting tables:
+2019-03-10 17:54:29,345 [main] INFO  (DfTableExtractor#doGetTableList():67) -   schema = {spring-dbflute-db.$$NoNameSchema$$ as main}
+2019-03-10 17:54:29,346 [main] INFO  (DfTableExtractor#doGetTableList():68) -   types  = [TABLE, VIEW]
+2019-03-10 17:54:29,443 [main] INFO  (DfCreateSchemaProcess#createSchema():266) - 
+2019-03-10 17:54:29,444 [main] INFO  (DfCreateSchemaProcess#createSchema():267) - * * * * * * * * *
+2019-03-10 17:54:29,445 [main] INFO  (DfCreateSchemaProcess#createSchema():268) - *               *
+2019-03-10 17:54:29,450 [main] INFO  (DfCreateSchemaProcess#createSchema():269) - * Create Schema *
+2019-03-10 17:54:29,451 [main] INFO  (DfCreateSchemaProcess#createSchema():270) - *               *
+2019-03-10 17:54:29,452 [main] INFO  (DfCreateSchemaProcess#createSchema():271) - * * * * * * * * *
+2019-03-10 17:54:29,458 [main] INFO  (DfSqlFileFireMan#fire():68) - ...Firing: replace-schema-10-basic.sql
+2019-03-10 17:54:29,466 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER(
+    MEMBER_ID INTEGER AUTO_INCREMENT NOT NULL COMMENT '会員ID: mapStyle, map:{ sea = mystic ; land = oneman } そのまま書くぞー',
+    MEMBER_NAME VARCHAR(180) NOT NULL COMMENT '会員名称: mapStyle, map:\\{ sea \\= mystic \\; land \\= oneman \\} 記号をエスケープするぞー',
+    MEMBER_ACCOUNT VARCHAR(50) NOT NULL COMMENT '会員アカウント: ベタッと \'シングルクォーテーション\' で囲うぞー',
+    MEMBER_STATUS_CODE CHAR(3) NOT NULL COMMENT '会員ステータスコード',
+    FORMALIZED_DATETIME DATETIME COMMENT '正式会員日時: ベタッと <span>HTMLタグ</span> で囲うぞー',
+    BIRTHDATE DATE COMMENT '生年月日: ベタッと &lt;HTMLエスケープ表現&gt; で囲うぞー (もともとSchemaHTML的にダメみたい!?)',
+    REGISTER_DATETIME DATETIME NOT NULL COMMENT '登録日時: レコードが登録された日時。共通カラムの一つ。',
+    REGISTER_USER VARCHAR(200) NOT NULL COMMENT '登録ユーザ: レコードを登録したユーザ。共通カラムの一つ。',
+    UPDATE_DATETIME DATETIME NOT NULL COMMENT '更新日時: レコードが（最後に）更新された日時。共通カラムの一つ。',
+    UPDATE_USER VARCHAR(200) NOT NULL COMMENT '更新ユーザ: レコードを更新したユーザ。',
+    VERSION_NO BIGINT NOT NULL COMMENT 'バージョンNO: レコードのバージョンを示すNO。
+更新回数と等しく、主に排他制御のために利用される。',
+    PRIMARY KEY (MEMBER_ID),
+    UNIQUE (MEMBER_ACCOUNT)
+) COMMENT='会員: 会員のプロフィールやアカウントなどの基本情報を保持する。
+基本的に物理削除はなく、退会したらステータスが退会会員になる。
+ライフサイクルやカテゴリの違う会員情報は、one-to-oneなどの関連テーブルにて。
+
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+それにしても、めっちゃデコメントのテストするよ
+o mapStyle, map:{ sea = mystic ; land = oneman } そのまま書いても大丈夫？ 
+o mapStyle, map:\\{ sea \\= mystic \\; land \\= oneman \\} エスケープされてても大丈夫？ 
+o DBコメントで、ベタッと \'シングルクォーテーション\' で囲うけど大丈夫？
+o DBコメントで、ベタッと <span>HTMLタグ</span> で囲うけど大丈夫？
+o DBコメントで、ベタッと &lt;HTMLエスケープ表現&gt; で囲うけど大丈夫？ (もともとSchemaHTML的にダメみたい!?)
+_/_/_/_/_/_/_/_/_/_/
+
+※同じようなこと、カラムコメントの方でも試している。
+
+※それにしても MySQL さん、エスケープがバックスラッシュなので、
+create文の中では「バックスラッシュ+シングルクォーテーション」ってなるし、
+バックスラッシュ自体を使うなら「バックスラッシュ+バックスラッシュ」ってしないとね。
+'
+2019-03-10 17:54:29,789 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_ADDRESS(
+    MEMBER_ADDRESS_ID INTEGER AUTO_INCREMENT NOT NULL COMMENT '会員住所ID: 会員住所を識別するID。
+履歴分も含むテーブルなので、これ自体はFKではない。',
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID: 会員を参照するID。
+履歴分を含むため、これだけではユニークにはならない。',
+    VALID_BEGIN_DATE DATE NOT NULL COMMENT '有効開始日: 一つの有効期間の開始を示す日付。
+前の有効終了日の次の日の値が格納される。',
+    VALID_END_DATE DATE NOT NULL COMMENT '有効終了日: 有効期間の終了日。
+次の有効開始日の一日前の値が格納される。
+ただし、次の有効期間がない場合は 9999/12/31 となる。',
+    ADDRESS VARCHAR(200) NOT NULL COMMENT '住所: まるごと住所',
+    REGION_ID INTEGER NOT NULL COMMENT '地域ID: 地域を参照するID。
+ここでは特に住所の内容と連動しているわけではない。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (MEMBER_ADDRESS_ID),
+    UNIQUE (MEMBER_ID, VALID_BEGIN_DATE)
+) COMMENT='会員住所情報: 会員の住所に関する情報。
+同時に有効期間ごとに履歴管理されている。'
+2019-03-10 17:54:29,830 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_FOLLOWING(
+    MEMBER_FOLLOWING_ID BIGINT AUTO_INCREMENT NOT NULL COMMENT '会員フォローイングID: 連番',
+    MY_MEMBER_ID INTEGER NOT NULL COMMENT 'わたし: 気になった人がいて...勇気を振り絞った会員のID。',
+    YOUR_MEMBER_ID INTEGER NOT NULL COMMENT 'あなた: いきなりのアクションに...ちょっと心揺らいだ会員のID。',
+    FOLLOW_DATETIME DATETIME NOT NULL COMMENT 'その瞬間: ふりかえるとちょっと恥ずかしい気持ちになる日時',
+    PRIMARY KEY (MEMBER_FOLLOWING_ID),
+    UNIQUE (MY_MEMBER_ID, YOUR_MEMBER_ID)
+) COMMENT='会員フォローイング: とある会員が他の会員をフォローできる。すると、フォローした会員の購入履歴が閲覧できる。'
+2019-03-10 17:54:29,851 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_LOGIN(
+    MEMBER_LOGIN_ID BIGINT AUTO_INCREMENT NOT NULL COMMENT '会員ログインID',
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID',
+    LOGIN_DATETIME DATETIME NOT NULL COMMENT 'ログイン日時: ログインした瞬間の日時。',
+    MOBILE_LOGIN_FLG INTEGER NOT NULL COMMENT 'モバイルログインフラグ: モバイル機器からのログインか否か。',
+    LOGIN_MEMBER_STATUS_CODE CHAR(3) NOT NULL COMMENT 'ログイン会員ステータスコード: ログイン時の会員ステータス',
+    PRIMARY KEY (MEMBER_LOGIN_ID),
+    UNIQUE (MEMBER_ID, LOGIN_DATETIME)
+) COMMENT='会員ログイン情報: ログインするたびに登録されるログイン履歴。'
+2019-03-10 17:54:29,869 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_SECURITY(
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID: そのまま one-to-one を構成するためのFKとなる。',
+    LOGIN_PASSWORD VARCHAR(50) NOT NULL COMMENT 'ログインパスワード: ログイン時に利用するパスワード。
+本当は良くないが、Exampleなのでひとまず暗号化していない。',
+    REMINDER_QUESTION VARCHAR(50) NOT NULL COMMENT 'リマインダ質問: パスワードを忘れた際のリマインダ機能における質問の内容。',
+    REMINDER_ANSWER VARCHAR(50) NOT NULL COMMENT 'リマインダ回答: パスワードを忘れた際のリマインダ機能における質問の答え。',
+    REMINDER_USE_COUNT INTEGER NOT NULL COMMENT 'リマインダ利用回数: リマインダを利用した回数。
+多いと忘れっぽい会員と言えるが、
+そんなことを知ってもしょうがない。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (MEMBER_ID)
+) COMMENT='会員セキュリティ情報: 会員とは one-to-one で、会員一人につき必ず一つのセキュリティ情報がある'
+2019-03-10 17:54:29,906 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_SERVICE(
+    MEMBER_SERVICE_ID INTEGER AUTO_INCREMENT NOT NULL COMMENT '会員サービスID: 独立した主キーとなるが、実質的に会員IDとは one-to-one である。',
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID: 会員を参照するID。ユニークなので、会員とは one-to-one の関係に。',
+    SERVICE_POINT_COUNT INTEGER NOT NULL COMMENT 'サービスポイント数: 会員が現在利用できるサービスポイントの数。
+基本的に、購入時には増えてポイントを使ったら減る。',
+    SERVICE_RANK_CODE CHAR(3) NOT NULL COMMENT 'サービスランクコード: サービスランクを参照するコード。
+どんなランクがあるのかドキドキですね。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (MEMBER_SERVICE_ID),
+    UNIQUE (MEMBER_ID)
+) COMMENT='会員サービス: 会員のサービス情報（ポイントサービスなど）。'
+2019-03-10 17:54:29,967 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_WITHDRAWAL(
+    MEMBER_ID INTEGER NOT NULL,
+    WITHDRAWAL_REASON_CODE CHAR(3) COMMENT '退会理由コード: 退会した定型理由を参照するコード。
+何も言わずに退会する会員もいるので必須項目ではない。',
+    WITHDRAWAL_REASON_INPUT_TEXT TEXT COMMENT '退会理由入力テキスト: 会員がフリーテキストで入力できる退会理由。
+もう言いたいこと言ってもらう感じ。',
+    WITHDRAWAL_DATETIME DATETIME NOT NULL COMMENT '退会日時: 退会した瞬間の日時。
+正式会員日時と違い、こっちはone-to-oneの別テーブルで。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    PRIMARY KEY (MEMBER_ID)
+) COMMENT='会員退会情報: 退会会員の退会に関する詳細な情報。
+退会会員のみデータが存在する。'
+2019-03-10 17:54:30,009 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PURCHASE(
+    PURCHASE_ID BIGINT AUTO_INCREMENT NOT NULL COMMENT '購入ID: 連番',
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID: 会員を参照するID。
+購入を識別する自然キー（複合ユニーク制約）の筆頭要素。',
+    PRODUCT_ID INTEGER NOT NULL COMMENT '商品ID: 商品を参照するID。',
+    PURCHASE_DATETIME DATETIME NOT NULL COMMENT '購入日時: 購入した瞬間の日時。',
+    PURCHASE_COUNT INTEGER NOT NULL COMMENT '購入数量: 購入した商品の（一回の購入における）数量。',
+    PURCHASE_PRICE INTEGER NOT NULL COMMENT '購入価格: 購入によって実際に会員が支払った（支払う予定の）価格。
+基本は商品の定価に購入数量を掛けたものになるが、
+ポイント利用や割引があったりと必ずしもそうはならない。',
+    PAYMENT_COMPLETE_FLG INTEGER NOT NULL COMMENT '支払完了フラグ: この購入に関しての支払いが完了しているか否か。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (PURCHASE_ID),
+    UNIQUE (MEMBER_ID, PRODUCT_ID, PURCHASE_DATETIME),
+    KEY (MEMBER_ID),
+    KEY (PRODUCT_ID)
+) COMMENT='購入: 一つの商品に対する一回の購入を表現する。
+一回の購入で一つの商品を複数個買うこともある。'
+2019-03-10 17:54:30,088 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PURCHASE_PAYMENT(
+    PURCHASE_PAYMENT_ID BIGINT AUTO_INCREMENT NOT NULL COMMENT '購入支払ID: 連番',
+    PURCHASE_ID BIGINT NOT NULL COMMENT '購入ID: 支払い対象の購入へのID',
+    PAYMENT_AMOUNT DECIMAL(10,2) NOT NULL COMMENT '支払金額: 支払った金額。さて、小数点なのはなぜでしょう？',
+    PAYMENT_DATETIME DATETIME NOT NULL COMMENT '支払日時: 支払ったときの日時',
+    PAYMENT_METHOD_CODE CHAR(3) NOT NULL COMMENT '支払方法コード: 手渡しや銀行振込など',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    PRIMARY KEY (PURCHASE_PAYMENT_ID)
+) COMMENT='購入支払: 購入に対する支払。
+分割払いもできるのでmanyとなり、会員からの孫テーブルのテストができてうれしい。'
+2019-03-10 17:54:30,115 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PRODUCT(
+    PRODUCT_ID INTEGER AUTO_INCREMENT NOT NULL COMMENT '商品ID',
+    PRODUCT_NAME VARCHAR(50) NOT NULL COMMENT '商品名称',
+    PRODUCT_HANDLE_CODE VARCHAR(100) NOT NULL COMMENT '商品ハンドルコード: 商品を識別する業務上のコード。',
+    PRODUCT_CATEGORY_CODE CHAR(3) NOT NULL,
+    PRODUCT_STATUS_CODE CHAR(3) NOT NULL,
+    REGULAR_PRICE INTEGER NOT NULL COMMENT '定価: 特に割引などがない場合の販売価格',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (PRODUCT_ID),
+    UNIQUE (PRODUCT_HANDLE_CODE)
+) COMMENT='商品: 会員へ販売する商品のマスタ。
+販売可能なものだけでなく、生産中止や販売中止などの商品も含まれる。'
+2019-03-10 17:54:30,139 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PRODUCT_CATEGORY(
+    PRODUCT_CATEGORY_CODE CHAR(3) NOT NULL COMMENT '商品カテゴリコード',
+    PRODUCT_CATEGORY_NAME VARCHAR(50) NOT NULL COMMENT '商品カテゴリ名称',
+    PARENT_CATEGORY_CODE CHAR(3) COMMENT '親カテゴリコード: 最上位の場合はデータなし。',
+    PRIMARY KEY (PRODUCT_CATEGORY_CODE)
+) COMMENT='商品カテゴリ: 商品のカテゴリを表現するマスタ。
+自己参照の階層になっている。'
+2019-03-10 17:54:30,160 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PRODUCT_STATUS(
+    PRODUCT_STATUS_CODE CHAR(3) NOT NULL COMMENT '商品ステータスコード',
+    PRODUCT_STATUS_NAME VARCHAR(50) NOT NULL COMMENT '商品ステータス名称',
+    DISPLAY_ORDER INTEGER NOT NULL COMMENT '表示順',
+    PRIMARY KEY (PRODUCT_STATUS_CODE),
+    UNIQUE (DISPLAY_ORDER)
+) COMMENT='商品ステータス'
+2019-03-10 17:54:30,184 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table REGION(
+    REGION_ID INTEGER NOT NULL COMMENT '地域ID',
+    REGION_NAME VARCHAR(50) NOT NULL COMMENT '地域名称',
+    PRIMARY KEY (REGION_ID)
+) COMMENT='地域: 主に会員の住所に対応する地域。
+かなりざっくりした感じではある。'
+2019-03-10 17:54:30,205 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table SERVICE_RANK(
+    SERVICE_RANK_CODE CHAR(3) NOT NULL COMMENT 'サービスランクコード: サービスランクを識別するコード。',
+    SERVICE_RANK_NAME VARCHAR(50) NOT NULL COMMENT 'サービスランク名称: サービスランクの名称。
+（ゴールドとかプラチナとか基本的には威厳のある名前）',
+    SERVICE_POINT_INCIDENCE NUMERIC(5, 3) NOT NULL COMMENT 'サービスポイント発生率: 購入ごとのサービスポイントの発生率。
+購入価格にこの値をかけた数が発生ポイント。',
+    NEW_ACCEPTABLE_FLG INTEGER NOT NULL COMMENT '新規受け入れ可能フラグ: このランクへの新規受け入れができるかどうか。',
+    DESCRIPTION VARCHAR(200) NOT NULL,
+    DISPLAY_ORDER INTEGER NOT NULL,
+    PRIMARY KEY (SERVICE_RANK_CODE),
+    UNIQUE (DISPLAY_ORDER)
+) COMMENT='サービスランク: 会員のサービスレベルを表現するランク。
+（ゴールドとかプラチナとか）'
+2019-03-10 17:54:30,235 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_STATUS(
+    MEMBER_STATUS_CODE CHAR(3) NOT NULL COMMENT '会員ステータスコード: 会員ステータスを識別するコード。',
+    MEMBER_STATUS_NAME VARCHAR(50) NOT NULL COMMENT '会員ステータス名称',
+    DESCRIPTION VARCHAR(200) NOT NULL COMMENT '説明: 会員ステータスそれぞれの説明。
+気の利いた説明があるとディベロッパーがとても助かる。',
+    DISPLAY_ORDER INTEGER NOT NULL COMMENT '表示順: UI上のステータスの表示順を示すNO。
+並べるときは、このカラムに対して昇順のソート条件にする。',
+    PRIMARY KEY (MEMBER_STATUS_CODE),
+    UNIQUE (DISPLAY_ORDER)
+) COMMENT='会員ステータス'
+2019-03-10 17:54:30,259 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table WITHDRAWAL_REASON(
+    WITHDRAWAL_REASON_CODE CHAR(3) NOT NULL COMMENT '退会理由コード',
+    WITHDRAWAL_REASON_TEXT TEXT NOT NULL COMMENT '退会理由テキスト: 退会理由の内容。テキスト形式なので目いっぱい書けるが、
+そうするとUI側できれいに見せるのが大変でしょうね。',
+    DISPLAY_ORDER INTEGER NOT NULL COMMENT '表示順',
+    PRIMARY KEY (WITHDRAWAL_REASON_CODE),
+    UNIQUE (DISPLAY_ORDER)
+) COMMENT='退会理由: 会員に選ばせる定型的な退会理由のマスタ。'
+2019-03-10 17:54:30,295 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER add constraint FK_MEMBER_MEMBER_STATUS 
+    foreign key (MEMBER_STATUS_CODE) references MEMBER_STATUS (MEMBER_STATUS_CODE)
+2019-03-10 17:54:30,405 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_ADDRESS add constraint FK_MEMBER_ADDRESS_MEMBER 
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:54:30,486 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_ADDRESS add constraint FK_MEMBER_ADDRESS_REGION 
+    foreign key (REGION_ID) references REGION (REGION_ID)
+2019-03-10 17:54:30,535 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_FOLLOWING add constraint FK_MEMBER_FOLLOWING_MY_MEMBER 
+    foreign key (MY_MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:54:30,585 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_FOLLOWING add constraint FK_MEMBER_FOLLOWING_YOUR_MEMBER 
+    foreign key (YOUR_MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:54:30,644 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_LOGIN add constraint FK_MEMBER_LOGIN_MEMBER_STATUS 
+    foreign key (LOGIN_MEMBER_STATUS_CODE) references MEMBER_STATUS (MEMBER_STATUS_CODE)
+2019-03-10 17:54:30,717 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_LOGIN add constraint FK_MEMBER_LOGIN_MEMBER 
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:54:30,829 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_SERVICE add constraint FK_MEMBER_SERVICE_MEMBER 
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:54:31,133 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_SERVICE add constraint FK_MEMBER_SERVICE_SERVICE_RANK_CODE 
+    foreign key (SERVICE_RANK_CODE) references SERVICE_RANK (SERVICE_RANK_CODE)
+2019-03-10 17:54:31,434 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_SECURITY add constraint FK_MEMBER_SECURITY_MEMBER 
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:54:31,489 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_WITHDRAWAL add constraint FK_MEMBER_WITHDRAWAL_MEMBER 
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:54:31,538 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_WITHDRAWAL add constraint FK_MEMBER_WITHDRAWAL_WITHDRAWAL_REASON 
+    foreign key (WITHDRAWAL_REASON_CODE) references WITHDRAWAL_REASON (WITHDRAWAL_REASON_CODE)
+2019-03-10 17:54:31,569 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PURCHASE add constraint FK_PURCHASE_MEMBER 
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:54:31,617 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PURCHASE add constraint FK_PURCHASE_PRODUCT 
+    foreign key (PRODUCT_ID) references PRODUCT (PRODUCT_ID)
+2019-03-10 17:54:31,685 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PURCHASE_PAYMENT add constraint FK_PURCHASE_PAYMENT_PURCHASE 
+    foreign key (PURCHASE_ID) references PURCHASE (PURCHASE_ID)
+2019-03-10 17:54:31,833 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PRODUCT add constraint FK_PRODUCT_PRODUCT_CATEGORY 
+    foreign key (PRODUCT_CATEGORY_CODE) references PRODUCT_CATEGORY (PRODUCT_CATEGORY_CODE)
+2019-03-10 17:54:31,904 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PRODUCT add constraint FK_PRODUCT_PRODUCT_STATUS 
+    foreign key (PRODUCT_STATUS_CODE) references PRODUCT_STATUS (PRODUCT_STATUS_CODE)
+2019-03-10 17:54:31,964 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PRODUCT_CATEGORY add constraint FK_PRODUCT_CATEGORY_PARENT 
+    foreign key (PARENT_CATEGORY_CODE) references PRODUCT_CATEGORY (PRODUCT_CATEGORY_CODE)
+2019-03-10 17:54:32,010 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_MEMBER_NAME ON MEMBER(MEMBER_NAME)
+2019-03-10 17:54:32,052 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_FORMALIZED_DATETIME ON MEMBER(FORMALIZED_DATETIME)
+2019-03-10 17:54:32,073 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_FOLLOWING_UNIQUE_REVERSE on MEMBER_FOLLOWING(YOUR_MEMBER_ID, MY_MEMBER_ID)
+2019-03-10 17:54:32,095 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_FOLLOWING_FOLLOW_DATETIME on MEMBER_FOLLOWING(FOLLOW_DATETIME)
+2019-03-10 17:54:32,141 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_LOGIN_DATETIME ON MEMBER_LOGIN(LOGIN_DATETIME)
+2019-03-10 17:54:32,156 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_SERVICE_POINT_COUNT ON MEMBER_SERVICE(SERVICE_POINT_COUNT)
+2019-03-10 17:54:32,189 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PURCHASE_PRODUCT_DATETIME ON PURCHASE(PRODUCT_ID, PURCHASE_DATETIME)
+2019-03-10 17:54:32,205 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PURCHASE_DATETIME_MEMBER ON PURCHASE(PURCHASE_DATETIME, MEMBER_ID)
+2019-03-10 17:54:32,221 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PURCHASE_PRICE ON PURCHASE(PURCHASE_PRICE)
+2019-03-10 17:54:32,281 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PURCHASE_PAYMENT_DATETIME on PURCHASE_PAYMENT(PAYMENT_DATETIME, PAYMENT_AMOUNT)
+2019-03-10 17:54:32,367 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PRODUCT_PRODUCT_NAME ON PRODUCT(PRODUCT_NAME)
+2019-03-10 17:54:32,405 [main] INFO  (DfSqlFileRunnerBase#traceResult():172) -  -> success=45 failure=0
+2019-03-10 17:54:32,407 [main] INFO  (DfSqlFileFireMan#fire():68) - ...Firing: replace-schema.sql
+2019-03-10 17:54:32,413 [main] INFO  (DfSqlFileRunnerBase#traceResult():172) -  -> success=0 failure=0
+2019-03-10 17:54:32,413 [main] INFO  (DfSqlFileFireMan#fire():93) - {Create Schema}: success=45 failure=0 (in 2 files)
+2019-03-10 17:54:32,677 [main] INFO  (DfLoadDataProcess#execute():130) - 
+2019-03-10 17:54:32,678 [main] INFO  (DfLoadDataProcess#execute():131) - * * * * * * * * * * *
+2019-03-10 17:54:32,683 [main] INFO  (DfLoadDataProcess#execute():132) - *                   *
+2019-03-10 17:54:32,684 [main] INFO  (DfLoadDataProcess#execute():133) - * Load Data         *
+2019-03-10 17:54:32,685 [main] INFO  (DfLoadDataProcess#execute():134) - *                   *
+2019-03-10 17:54:32,686 [main] INFO  (DfLoadDataProcess#execute():135) - * * * * * * * * * * *
+2019-03-10 17:54:32,780 [main] INFO  (DfTakeFinallyProcess#takeFinally():237) - 
+2019-03-10 17:54:32,780 [main] INFO  (DfTakeFinallyProcess#takeFinally():238) - * * * * * * * **
+2019-03-10 17:54:32,780 [main] INFO  (DfTakeFinallyProcess#takeFinally():239) - *              *
+2019-03-10 17:54:32,781 [main] INFO  (DfTakeFinallyProcess#takeFinally():240) - * Take Finally *
+2019-03-10 17:54:32,781 [main] INFO  (DfTakeFinallyProcess#takeFinally():241) - *              *
+2019-03-10 17:54:32,781 [main] INFO  (DfTakeFinallyProcess#takeFinally():242) - * * * * * * * **
+2019-03-10 17:54:32,792 [main] INFO  (DfSqlFileFireMan#fire():68) - ...Firing: take-finally.sql
+2019-03-10 17:54:32,797 [main] INFO  (DfSqlFileRunnerBase#traceResult():172) -  -> success=0 failure=0
+2019-03-10 17:54:32,797 [main] INFO  (DfSqlFileFireMan#fire():93) - {Take Finally}: success=0 failure=0 (in 1 files)
+2019-03-10 17:54:32,801 [main] INFO  (DfDataSourceHandler#destroy():120) - ...closeReally()
+2019-03-10 17:54:32,827 [main] INFO  (DfDBFluteTaskUtil#logFinalMessage():139) - 
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+[Final Message]: 00m04s451ms
+
+  DBFLUTE_CLIENT: {spring-dbflute}
+    database  = mysql (MySQL 5.7.12)
+    language  = java
+    container = spring
+    package   = org.docksidestage.dbflute
+
+  DBFLUTE_ENVIRONMENT_TYPE: {}
+    driver = com.mysql.jdbc.Driver
+    url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+    schema = {spring-dbflute-db.$$NoNameSchema$$ as main}
+    user   = spring-dbflute-user
+    props  = {}
+    additionalSchema = 
+    repsEnvType      = ut
+    refreshProject   = $$AutoDetect$$
+
+ {Create Schema}: success=45 failure=0 (in 2 files)
+  o replace-schema-10-basic.sql
+  o replace-schema.sql
+
+ {Load Data}: loaded-files=0
+  - (no data file)
+
+ {Take Finally}: success=0 failure=0 (in 1 files)
+  o take-finally.sql
+_/_/_/_/_/_/_/_/_/_/ {ReplaceSchema}
+2019-03-10 17:55:29,021 [main] INFO  (DfReplaceSchemaTask#begin():92) - +------------------------------------------+
+2019-03-10 17:55:29,024 [main] INFO  (DfReplaceSchemaTask#begin():93) - |                                          |
+2019-03-10 17:55:29,024 [main] INFO  (DfReplaceSchemaTask#begin():94) - |              ReplaceSchema               |
+2019-03-10 17:55:29,029 [main] INFO  (DfReplaceSchemaTask#begin():102) - |                                          |
+2019-03-10 17:55:29,030 [main] INFO  (DfReplaceSchemaTask#begin():103) - +------------------------------------------+
+2019-03-10 17:55:29,048 [main] INFO  (DfDataSourceHandler#prepare():78) - ...Preparing data source:
+2019-03-10 17:55:29,049 [main] INFO  (DfDataSourceHandler#prepare():79) -   driver = com.mysql.jdbc.Driver
+2019-03-10 17:55:29,049 [main] INFO  (DfDataSourceHandler#prepare():80) -   url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+2019-03-10 17:55:29,049 [main] INFO  (DfDataSourceHandler#prepare():81) -   user   = spring-dbflute-user
+2019-03-10 17:55:29,057 [main] INFO  (DfDataSourceHandler#createConnection():166) - ...Connecting to database by data source:
+2019-03-10 17:55:29,409 [main] INFO  (DfDataSourceHandler#setupConnectionMetaInfo():233) -   product = MySQL 5.7.12
+2019-03-10 17:55:29,409 [main] INFO  (DfDataSourceHandler#setupConnectionMetaInfo():234) -   driver  = MySQL Connector Java mysql-connector-java-5.1.46 ( Revision: 9cc87a48e75c2d2e87c1a293b2862ce651cb256e ) for JDBC 4.0
+2019-03-10 17:55:29,430 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():229) - 
+2019-03-10 17:55:29,431 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():230) - * * * * * * * * * * *
+2019-03-10 17:55:29,431 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():231) - *                   *
+2019-03-10 17:55:29,432 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():232) - * Initialize Schema *
+2019-03-10 17:55:29,434 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():233) - *                   *
+2019-03-10 17:55:29,434 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():234) - * * * * * * * * * * *
+2019-03-10 17:55:29,449 [main] INFO  (DfTableExtractor#doGetTableList():66) - ...Getting tables:
+2019-03-10 17:55:29,450 [main] INFO  (DfTableExtractor#doGetTableList():67) -   schema = {spring-dbflute-db.$$NoNameSchema$$ as main}
+2019-03-10 17:55:29,450 [main] INFO  (DfTableExtractor#doGetTableList():68) -   types  = [TABLE, VIEW]
+2019-03-10 17:55:29,514 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table MEMBER_ADDRESS
+2019-03-10 17:55:29,528 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table MEMBER_FOLLOWING
+2019-03-10 17:55:29,541 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table MEMBER_LOGIN
+2019-03-10 17:55:29,552 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table MEMBER_SECURITY
+2019-03-10 17:55:29,568 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table MEMBER_SERVICE
+2019-03-10 17:55:29,586 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table MEMBER_WITHDRAWAL
+2019-03-10 17:55:29,608 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table PURCHASE_PAYMENT
+2019-03-10 17:55:29,630 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER drop foreign key FK_MEMBER_MEMBER_STATUS
+2019-03-10 17:55:29,639 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_ADDRESS drop foreign key FK_MEMBER_ADDRESS_MEMBER
+2019-03-10 17:55:29,651 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_ADDRESS drop foreign key FK_MEMBER_ADDRESS_REGION
+2019-03-10 17:55:29,659 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_FOLLOWING drop foreign key FK_MEMBER_FOLLOWING_MY_MEMBER
+2019-03-10 17:55:29,666 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_FOLLOWING drop foreign key FK_MEMBER_FOLLOWING_YOUR_MEMBER
+2019-03-10 17:55:29,673 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_LOGIN drop foreign key FK_MEMBER_LOGIN_MEMBER_STATUS
+2019-03-10 17:55:29,681 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_LOGIN drop foreign key FK_MEMBER_LOGIN_MEMBER
+2019-03-10 17:55:29,693 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_SECURITY drop foreign key FK_MEMBER_SECURITY_MEMBER
+2019-03-10 17:55:29,704 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_SERVICE drop foreign key FK_MEMBER_SERVICE_MEMBER
+2019-03-10 17:55:29,721 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_SERVICE drop foreign key FK_MEMBER_SERVICE_SERVICE_RANK_CODE
+2019-03-10 17:55:29,733 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_WITHDRAWAL drop foreign key FK_MEMBER_WITHDRAWAL_MEMBER
+2019-03-10 17:55:29,744 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_WITHDRAWAL drop foreign key FK_MEMBER_WITHDRAWAL_WITHDRAWAL_REASON
+2019-03-10 17:55:29,753 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table PRODUCT drop foreign key FK_PRODUCT_PRODUCT_CATEGORY
+2019-03-10 17:55:29,760 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table PRODUCT drop foreign key FK_PRODUCT_PRODUCT_STATUS
+2019-03-10 17:55:29,772 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table PRODUCT_CATEGORY drop foreign key FK_PRODUCT_CATEGORY_PARENT
+2019-03-10 17:55:29,788 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table PURCHASE drop foreign key FK_PURCHASE_MEMBER
+2019-03-10 17:55:29,807 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table PURCHASE drop foreign key FK_PURCHASE_PRODUCT
+2019-03-10 17:55:29,857 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table PURCHASE_PAYMENT drop foreign key FK_PURCHASE_PAYMENT_PURCHASE
+2019-03-10 17:55:29,880 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER
+2019-03-10 17:55:29,908 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_ADDRESS
+2019-03-10 17:55:29,928 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_FOLLOWING
+2019-03-10 17:55:29,950 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_LOGIN
+2019-03-10 17:55:29,970 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_SECURITY
+2019-03-10 17:55:29,988 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_SERVICE
+2019-03-10 17:55:30,000 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_STATUS
+2019-03-10 17:55:30,014 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_WITHDRAWAL
+2019-03-10 17:55:30,019 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table PRODUCT
+2019-03-10 17:55:30,025 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table PRODUCT_CATEGORY
+2019-03-10 17:55:30,032 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table PRODUCT_STATUS
+2019-03-10 17:55:30,042 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table PURCHASE
+2019-03-10 17:55:30,049 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table PURCHASE_PAYMENT
+2019-03-10 17:55:30,056 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table REGION
+2019-03-10 17:55:30,061 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table SERVICE_RANK
+2019-03-10 17:55:30,068 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table WITHDRAWAL_REASON
+2019-03-10 17:55:30,100 [main] INFO  (DfCreateSchemaProcess#createSchema():266) - 
+2019-03-10 17:55:30,100 [main] INFO  (DfCreateSchemaProcess#createSchema():267) - * * * * * * * * *
+2019-03-10 17:55:30,101 [main] INFO  (DfCreateSchemaProcess#createSchema():268) - *               *
+2019-03-10 17:55:30,101 [main] INFO  (DfCreateSchemaProcess#createSchema():269) - * Create Schema *
+2019-03-10 17:55:30,101 [main] INFO  (DfCreateSchemaProcess#createSchema():270) - *               *
+2019-03-10 17:55:30,101 [main] INFO  (DfCreateSchemaProcess#createSchema():271) - * * * * * * * * *
+2019-03-10 17:55:30,109 [main] INFO  (DfSqlFileFireMan#fire():68) - ...Firing: replace-schema.sql
+2019-03-10 17:55:30,129 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER(
+    MEMBER_ID INTEGER AUTO_INCREMENT NOT NULL COMMENT '会員ID: mapStyle, map:{ sea = mystic ; land = oneman } そのまま書くぞー',
+    MEMBER_NAME VARCHAR(180) NOT NULL COMMENT '会員名称: mapStyle, map:\\{ sea \\= mystic \\; land \\= oneman \\} 記号をエスケープするぞー',
+    MEMBER_ACCOUNT VARCHAR(50) NOT NULL COMMENT '会員アカウント: ベタッと \'シングルクォーテーション\' で囲うぞー',
+    MEMBER_STATUS_CODE CHAR(3) NOT NULL COMMENT '会員ステータスコード',
+    FORMALIZED_DATETIME DATETIME COMMENT '正式会員日時: ベタッと <span>HTMLタグ</span> で囲うぞー',
+    BIRTHDATE DATE COMMENT '生年月日: ベタッと &lt;HTMLエスケープ表現&gt; で囲うぞー (もともとSchemaHTML的にダメみたい!?)',
+    REGISTER_DATETIME DATETIME NOT NULL COMMENT '登録日時: レコードが登録された日時。共通カラムの一つ。',
+    REGISTER_USER VARCHAR(200) NOT NULL COMMENT '登録ユーザ: レコードを登録したユーザ。共通カラムの一つ。',
+    UPDATE_DATETIME DATETIME NOT NULL COMMENT '更新日時: レコードが（最後に）更新された日時。共通カラムの一つ。',
+    UPDATE_USER VARCHAR(200) NOT NULL COMMENT '更新ユーザ: レコードを更新したユーザ。',
+    VERSION_NO BIGINT NOT NULL COMMENT 'バージョンNO: レコードのバージョンを示すNO。
+更新回数と等しく、主に排他制御のために利用される。',
+    PRIMARY KEY (MEMBER_ID),
+    UNIQUE (MEMBER_ACCOUNT)
+) COMMENT='会員: 会員のプロフィールやアカウントなどの基本情報を保持する。
+基本的に物理削除はなく、退会したらステータスが退会会員になる。
+ライフサイクルやカテゴリの違う会員情報は、one-to-oneなどの関連テーブルにて。
+
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+それにしても、めっちゃデコメントのテストするよ
+o mapStyle, map:{ sea = mystic ; land = oneman } そのまま書いても大丈夫？
+o mapStyle, map:\\{ sea \\= mystic \\; land \\= oneman \\} エスケープされてても大丈夫？
+o DBコメントで、ベタッと \'シングルクォーテーション\' で囲うけど大丈夫？
+o DBコメントで、ベタッと <span>HTMLタグ</span> で囲うけど大丈夫？
+o DBコメントで、ベタッと &lt;HTMLエスケープ表現&gt; で囲うけど大丈夫？ (もともとSchemaHTML的にダメみたい!?)
+_/_/_/_/_/_/_/_/_/_/
+
+※同じようなこと、カラムコメントの方でも試している。
+
+※それにしても MySQL さん、エスケープがバックスラッシュなので、
+create文の中では「バックスラッシュ+シングルクォーテーション」ってなるし、
+バックスラッシュ自体を使うなら「バックスラッシュ+バックスラッシュ」ってしないとね。
+'
+2019-03-10 17:55:30,181 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_ADDRESS(
+    MEMBER_ADDRESS_ID INTEGER AUTO_INCREMENT NOT NULL COMMENT '会員住所ID: 会員住所を識別するID。
+履歴分も含むテーブルなので、これ自体はFKではない。',
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID: 会員を参照するID。
+履歴分を含むため、これだけではユニークにはならない。',
+    VALID_BEGIN_DATE DATE NOT NULL COMMENT '有効開始日: 一つの有効期間の開始を示す日付。
+前の有効終了日の次の日の値が格納される。',
+    VALID_END_DATE DATE NOT NULL COMMENT '有効終了日: 有効期間の終了日。
+次の有効開始日の一日前の値が格納される。
+ただし、次の有効期間がない場合は 9999/12/31 となる。',
+    ADDRESS VARCHAR(200) NOT NULL COMMENT '住所: まるごと住所',
+    REGION_ID INTEGER NOT NULL COMMENT '地域ID: 地域を参照するID。
+ここでは特に住所の内容と連動しているわけではない。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (MEMBER_ADDRESS_ID),
+    UNIQUE (MEMBER_ID, VALID_BEGIN_DATE)
+) COMMENT='会員住所情報: 会員の住所に関する情報。
+同時に有効期間ごとに履歴管理されている。'
+2019-03-10 17:55:30,219 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_FOLLOWING(
+    MEMBER_FOLLOWING_ID BIGINT AUTO_INCREMENT NOT NULL COMMENT '会員フォローイングID: 連番',
+    MY_MEMBER_ID INTEGER NOT NULL COMMENT 'わたし: 気になった人がいて...勇気を振り絞った会員のID。',
+    YOUR_MEMBER_ID INTEGER NOT NULL COMMENT 'あなた: いきなりのアクションに...ちょっと心揺らいだ会員のID。',
+    FOLLOW_DATETIME DATETIME NOT NULL COMMENT 'その瞬間: ふりかえるとちょっと恥ずかしい気持ちになる日時',
+    PRIMARY KEY (MEMBER_FOLLOWING_ID),
+    UNIQUE (MY_MEMBER_ID, YOUR_MEMBER_ID)
+) COMMENT='会員フォローイング: とある会員が他の会員をフォローできる。すると、フォローした会員の購入履歴が閲覧できる。'
+2019-03-10 17:55:30,239 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_LOGIN(
+    MEMBER_LOGIN_ID BIGINT AUTO_INCREMENT NOT NULL COMMENT '会員ログインID',
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID',
+    LOGIN_DATETIME DATETIME NOT NULL COMMENT 'ログイン日時: ログインした瞬間の日時。',
+    MOBILE_LOGIN_FLG INTEGER NOT NULL COMMENT 'モバイルログインフラグ: モバイル機器からのログインか否か。',
+    LOGIN_MEMBER_STATUS_CODE CHAR(3) NOT NULL COMMENT 'ログイン会員ステータスコード: ログイン時の会員ステータス',
+    PRIMARY KEY (MEMBER_LOGIN_ID),
+    UNIQUE (MEMBER_ID, LOGIN_DATETIME)
+) COMMENT='会員ログイン情報: ログインするたびに登録されるログイン履歴。'
+2019-03-10 17:55:30,260 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_SECURITY(
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID: そのまま one-to-one を構成するためのFKとなる。',
+    LOGIN_PASSWORD VARCHAR(50) NOT NULL COMMENT 'ログインパスワード: ログイン時に利用するパスワード。
+本当は良くないが、Exampleなのでひとまず暗号化していない。',
+    REMINDER_QUESTION VARCHAR(50) NOT NULL COMMENT 'リマインダ質問: パスワードを忘れた際のリマインダ機能における質問の内容。',
+    REMINDER_ANSWER VARCHAR(50) NOT NULL COMMENT 'リマインダ回答: パスワードを忘れた際のリマインダ機能における質問の答え。',
+    REMINDER_USE_COUNT INTEGER NOT NULL COMMENT 'リマインダ利用回数: リマインダを利用した回数。
+多いと忘れっぽい会員と言えるが、
+そんなことを知ってもしょうがない。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (MEMBER_ID)
+) COMMENT='会員セキュリティ情報: 会員とは one-to-one で、会員一人につき必ず一つのセキュリティ情報がある'
+2019-03-10 17:55:30,279 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_SERVICE(
+    MEMBER_SERVICE_ID INTEGER AUTO_INCREMENT NOT NULL COMMENT '会員サービスID: 独立した主キーとなるが、実質的に会員IDとは one-to-one である。',
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID: 会員を参照するID。ユニークなので、会員とは one-to-one の関係に。',
+    SERVICE_POINT_COUNT INTEGER NOT NULL COMMENT 'サービスポイント数: 会員が現在利用できるサービスポイントの数。
+基本的に、購入時には増えてポイントを使ったら減る。',
+    SERVICE_RANK_CODE CHAR(3) NOT NULL COMMENT 'サービスランクコード: サービスランクを参照するコード。
+どんなランクがあるのかドキドキですね。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (MEMBER_SERVICE_ID),
+    UNIQUE (MEMBER_ID)
+) COMMENT='会員サービス: 会員のサービス情報（ポイントサービスなど）。'
+2019-03-10 17:55:30,298 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_WITHDRAWAL(
+    MEMBER_ID INTEGER NOT NULL,
+    WITHDRAWAL_REASON_CODE CHAR(3) COMMENT '退会理由コード: 退会した定型理由を参照するコード。
+何も言わずに退会する会員もいるので必須項目ではない。',
+    WITHDRAWAL_REASON_INPUT_TEXT TEXT COMMENT '退会理由入力テキスト: 会員がフリーテキストで入力できる退会理由。
+もう言いたいこと言ってもらう感じ。',
+    WITHDRAWAL_DATETIME DATETIME NOT NULL COMMENT '退会日時: 退会した瞬間の日時。
+正式会員日時と違い、こっちはone-to-oneの別テーブルで。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    PRIMARY KEY (MEMBER_ID)
+) COMMENT='会員退会情報: 退会会員の退会に関する詳細な情報。
+退会会員のみデータが存在する。'
+2019-03-10 17:55:30,315 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PURCHASE(
+    PURCHASE_ID BIGINT AUTO_INCREMENT NOT NULL COMMENT '購入ID: 連番',
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID: 会員を参照するID。
+購入を識別する自然キー（複合ユニーク制約）の筆頭要素。',
+    PRODUCT_ID INTEGER NOT NULL COMMENT '商品ID: 商品を参照するID。',
+    PURCHASE_DATETIME DATETIME NOT NULL COMMENT '購入日時: 購入した瞬間の日時。',
+    PURCHASE_COUNT INTEGER NOT NULL COMMENT '購入数量: 購入した商品の（一回の購入における）数量。',
+    PURCHASE_PRICE INTEGER NOT NULL COMMENT '購入価格: 購入によって実際に会員が支払った（支払う予定の）価格。
+基本は商品の定価に購入数量を掛けたものになるが、
+ポイント利用や割引があったりと必ずしもそうはならない。',
+    PAYMENT_COMPLETE_FLG INTEGER NOT NULL COMMENT '支払完了フラグ: この購入に関しての支払いが完了しているか否か。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (PURCHASE_ID),
+    UNIQUE (MEMBER_ID, PRODUCT_ID, PURCHASE_DATETIME),
+    KEY (MEMBER_ID),
+    KEY (PRODUCT_ID)
+) COMMENT='購入: 一つの商品に対する一回の購入を表現する。
+一回の購入で一つの商品を複数個買うこともある。'
+2019-03-10 17:55:30,337 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PURCHASE_PAYMENT(
+    PURCHASE_PAYMENT_ID BIGINT AUTO_INCREMENT NOT NULL COMMENT '購入支払ID: 連番',
+    PURCHASE_ID BIGINT NOT NULL COMMENT '購入ID: 支払い対象の購入へのID',
+    PAYMENT_AMOUNT DECIMAL(10,2) NOT NULL COMMENT '支払金額: 支払った金額。さて、小数点なのはなぜでしょう？',
+    PAYMENT_DATETIME DATETIME NOT NULL COMMENT '支払日時: 支払ったときの日時',
+    PAYMENT_METHOD_CODE CHAR(3) NOT NULL COMMENT '支払方法コード: 手渡しや銀行振込など',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    PRIMARY KEY (PURCHASE_PAYMENT_ID)
+) COMMENT='購入支払: 購入に対する支払。
+分割払いもできるのでmanyとなり、会員からの孫テーブルのテストができてうれしい。'
+2019-03-10 17:55:30,350 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PRODUCT(
+    PRODUCT_ID INTEGER AUTO_INCREMENT NOT NULL COMMENT '商品ID',
+    PRODUCT_NAME VARCHAR(50) NOT NULL COMMENT '商品名称',
+    PRODUCT_HANDLE_CODE VARCHAR(100) NOT NULL COMMENT '商品ハンドルコード: 商品を識別する業務上のコード。',
+    PRODUCT_CATEGORY_CODE CHAR(3) NOT NULL,
+    PRODUCT_STATUS_CODE CHAR(3) NOT NULL,
+    REGULAR_PRICE INTEGER NOT NULL COMMENT '定価: 特に割引などがない場合の販売価格',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (PRODUCT_ID),
+    UNIQUE (PRODUCT_HANDLE_CODE)
+) COMMENT='商品: 会員へ販売する商品のマスタ。
+販売可能なものだけでなく、生産中止や販売中止などの商品も含まれる。'
+2019-03-10 17:55:30,370 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PRODUCT_CATEGORY(
+    PRODUCT_CATEGORY_CODE CHAR(3) NOT NULL COMMENT '商品カテゴリコード',
+    PRODUCT_CATEGORY_NAME VARCHAR(50) NOT NULL COMMENT '商品カテゴリ名称',
+    PARENT_CATEGORY_CODE CHAR(3) COMMENT '親カテゴリコード: 最上位の場合はデータなし。',
+    PRIMARY KEY (PRODUCT_CATEGORY_CODE)
+) COMMENT='商品カテゴリ: 商品のカテゴリを表現するマスタ。
+自己参照の階層になっている。'
+2019-03-10 17:55:30,385 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PRODUCT_STATUS(
+    PRODUCT_STATUS_CODE CHAR(3) NOT NULL COMMENT '商品ステータスコード',
+    PRODUCT_STATUS_NAME VARCHAR(50) NOT NULL COMMENT '商品ステータス名称',
+    DISPLAY_ORDER INTEGER NOT NULL COMMENT '表示順',
+    PRIMARY KEY (PRODUCT_STATUS_CODE),
+    UNIQUE (DISPLAY_ORDER)
+) COMMENT='商品ステータス'
+2019-03-10 17:55:30,400 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table REGION(
+    REGION_ID INTEGER NOT NULL COMMENT '地域ID',
+    REGION_NAME VARCHAR(50) NOT NULL COMMENT '地域名称',
+    PRIMARY KEY (REGION_ID)
+) COMMENT='地域: 主に会員の住所に対応する地域。
+かなりざっくりした感じではある。'
+2019-03-10 17:55:30,412 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table SERVICE_RANK(
+    SERVICE_RANK_CODE CHAR(3) NOT NULL COMMENT 'サービスランクコード: サービスランクを識別するコード。',
+    SERVICE_RANK_NAME VARCHAR(50) NOT NULL COMMENT 'サービスランク名称: サービスランクの名称。
+（ゴールドとかプラチナとか基本的には威厳のある名前）',
+    SERVICE_POINT_INCIDENCE NUMERIC(5, 3) NOT NULL COMMENT 'サービスポイント発生率: 購入ごとのサービスポイントの発生率。
+購入価格にこの値をかけた数が発生ポイント。',
+    NEW_ACCEPTABLE_FLG INTEGER NOT NULL COMMENT '新規受け入れ可能フラグ: このランクへの新規受け入れができるかどうか。',
+    DESCRIPTION VARCHAR(200) NOT NULL,
+    DISPLAY_ORDER INTEGER NOT NULL,
+    PRIMARY KEY (SERVICE_RANK_CODE),
+    UNIQUE (DISPLAY_ORDER)
+) COMMENT='サービスランク: 会員のサービスレベルを表現するランク。
+（ゴールドとかプラチナとか）'
+2019-03-10 17:55:30,425 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_STATUS(
+    MEMBER_STATUS_CODE CHAR(3) NOT NULL COMMENT '会員ステータスコード: 会員ステータスを識別するコード。',
+    MEMBER_STATUS_NAME VARCHAR(50) NOT NULL COMMENT '会員ステータス名称',
+    DESCRIPTION VARCHAR(200) NOT NULL COMMENT '説明: 会員ステータスそれぞれの説明。
+気の利いた説明があるとディベロッパーがとても助かる。',
+    DISPLAY_ORDER INTEGER NOT NULL COMMENT '表示順: UI上のステータスの表示順を示すNO。
+並べるときは、このカラムに対して昇順のソート条件にする。',
+    PRIMARY KEY (MEMBER_STATUS_CODE),
+    UNIQUE (DISPLAY_ORDER)
+) COMMENT='会員ステータス'
+2019-03-10 17:55:30,440 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table WITHDRAWAL_REASON(
+    WITHDRAWAL_REASON_CODE CHAR(3) NOT NULL COMMENT '退会理由コード',
+    WITHDRAWAL_REASON_TEXT TEXT NOT NULL COMMENT '退会理由テキスト: 退会理由の内容。テキスト形式なので目いっぱい書けるが、
+そうするとUI側できれいに見せるのが大変でしょうね。',
+    DISPLAY_ORDER INTEGER NOT NULL COMMENT '表示順',
+    PRIMARY KEY (WITHDRAWAL_REASON_CODE),
+    UNIQUE (DISPLAY_ORDER)
+) COMMENT='退会理由: 会員に選ばせる定型的な退会理由のマスタ。'
+2019-03-10 17:55:30,455 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER add constraint FK_MEMBER_MEMBER_STATUS
+    foreign key (MEMBER_STATUS_CODE) references MEMBER_STATUS (MEMBER_STATUS_CODE)
+2019-03-10 17:55:30,488 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_ADDRESS add constraint FK_MEMBER_ADDRESS_MEMBER
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:55:30,518 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_ADDRESS add constraint FK_MEMBER_ADDRESS_REGION
+    foreign key (REGION_ID) references REGION (REGION_ID)
+2019-03-10 17:55:30,550 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_FOLLOWING add constraint FK_MEMBER_FOLLOWING_MY_MEMBER
+    foreign key (MY_MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:55:30,581 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_FOLLOWING add constraint FK_MEMBER_FOLLOWING_YOUR_MEMBER
+    foreign key (YOUR_MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:55:30,624 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_LOGIN add constraint FK_MEMBER_LOGIN_MEMBER_STATUS
+    foreign key (LOGIN_MEMBER_STATUS_CODE) references MEMBER_STATUS (MEMBER_STATUS_CODE)
+2019-03-10 17:55:30,671 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_LOGIN add constraint FK_MEMBER_LOGIN_MEMBER
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:55:30,706 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_SERVICE add constraint FK_MEMBER_SERVICE_MEMBER
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:55:30,736 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_SERVICE add constraint FK_MEMBER_SERVICE_SERVICE_RANK_CODE
+    foreign key (SERVICE_RANK_CODE) references SERVICE_RANK (SERVICE_RANK_CODE)
+2019-03-10 17:55:30,777 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_SECURITY add constraint FK_MEMBER_SECURITY_MEMBER
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:55:30,810 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_WITHDRAWAL add constraint FK_MEMBER_WITHDRAWAL_MEMBER
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:55:30,867 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_WITHDRAWAL add constraint FK_MEMBER_WITHDRAWAL_WITHDRAWAL_REASON
+    foreign key (WITHDRAWAL_REASON_CODE) references WITHDRAWAL_REASON (WITHDRAWAL_REASON_CODE)
+2019-03-10 17:55:30,906 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PURCHASE add constraint FK_PURCHASE_MEMBER
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:55:30,949 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PURCHASE add constraint FK_PURCHASE_PRODUCT
+    foreign key (PRODUCT_ID) references PRODUCT (PRODUCT_ID)
+2019-03-10 17:55:30,999 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PURCHASE_PAYMENT add constraint FK_PURCHASE_PAYMENT_PURCHASE
+    foreign key (PURCHASE_ID) references PURCHASE (PURCHASE_ID)
+2019-03-10 17:55:31,049 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PRODUCT add constraint FK_PRODUCT_PRODUCT_CATEGORY
+    foreign key (PRODUCT_CATEGORY_CODE) references PRODUCT_CATEGORY (PRODUCT_CATEGORY_CODE)
+2019-03-10 17:55:31,101 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PRODUCT add constraint FK_PRODUCT_PRODUCT_STATUS
+    foreign key (PRODUCT_STATUS_CODE) references PRODUCT_STATUS (PRODUCT_STATUS_CODE)
+2019-03-10 17:55:31,144 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PRODUCT_CATEGORY add constraint FK_PRODUCT_CATEGORY_PARENT
+    foreign key (PARENT_CATEGORY_CODE) references PRODUCT_CATEGORY (PRODUCT_CATEGORY_CODE)
+2019-03-10 17:55:31,180 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_MEMBER_NAME ON MEMBER(MEMBER_NAME)
+2019-03-10 17:55:31,191 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_FORMALIZED_DATETIME ON MEMBER(FORMALIZED_DATETIME)
+2019-03-10 17:55:31,206 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_FOLLOWING_UNIQUE_REVERSE on MEMBER_FOLLOWING(YOUR_MEMBER_ID, MY_MEMBER_ID)
+2019-03-10 17:55:31,223 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_FOLLOWING_FOLLOW_DATETIME on MEMBER_FOLLOWING(FOLLOW_DATETIME)
+2019-03-10 17:55:31,234 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_LOGIN_DATETIME ON MEMBER_LOGIN(LOGIN_DATETIME)
+2019-03-10 17:55:31,249 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_SERVICE_POINT_COUNT ON MEMBER_SERVICE(SERVICE_POINT_COUNT)
+2019-03-10 17:55:31,259 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PURCHASE_PRODUCT_DATETIME ON PURCHASE(PRODUCT_ID, PURCHASE_DATETIME)
+2019-03-10 17:55:31,269 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PURCHASE_DATETIME_MEMBER ON PURCHASE(PURCHASE_DATETIME, MEMBER_ID)
+2019-03-10 17:55:31,285 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PURCHASE_PRICE ON PURCHASE(PURCHASE_PRICE)
+2019-03-10 17:55:31,297 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PURCHASE_PAYMENT_DATETIME on PURCHASE_PAYMENT(PAYMENT_DATETIME, PAYMENT_AMOUNT)
+2019-03-10 17:55:31,310 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PRODUCT_PRODUCT_NAME ON PRODUCT(PRODUCT_NAME)
+2019-03-10 17:55:31,324 [main] INFO  (DfSqlFileRunnerBase#traceResult():172) -  -> success=45 failure=0
+2019-03-10 17:55:31,324 [main] INFO  (DfSqlFileFireMan#fire():93) - {Create Schema}: success=45 failure=0 (in 1 files)
+2019-03-10 17:55:31,400 [main] INFO  (DfLoadDataProcess#execute():130) - 
+2019-03-10 17:55:31,400 [main] INFO  (DfLoadDataProcess#execute():131) - * * * * * * * * * * *
+2019-03-10 17:55:31,400 [main] INFO  (DfLoadDataProcess#execute():132) - *                   *
+2019-03-10 17:55:31,400 [main] INFO  (DfLoadDataProcess#execute():133) - * Load Data         *
+2019-03-10 17:55:31,400 [main] INFO  (DfLoadDataProcess#execute():134) - *                   *
+2019-03-10 17:55:31,401 [main] INFO  (DfLoadDataProcess#execute():135) - * * * * * * * * * * *
+2019-03-10 17:55:31,421 [main] INFO  (DfTakeFinallyProcess#takeFinally():237) - 
+2019-03-10 17:55:31,422 [main] INFO  (DfTakeFinallyProcess#takeFinally():238) - * * * * * * * **
+2019-03-10 17:55:31,422 [main] INFO  (DfTakeFinallyProcess#takeFinally():239) - *              *
+2019-03-10 17:55:31,422 [main] INFO  (DfTakeFinallyProcess#takeFinally():240) - * Take Finally *
+2019-03-10 17:55:31,423 [main] INFO  (DfTakeFinallyProcess#takeFinally():241) - *              *
+2019-03-10 17:55:31,423 [main] INFO  (DfTakeFinallyProcess#takeFinally():242) - * * * * * * * **
+2019-03-10 17:55:31,442 [main] INFO  (DfSqlFileFireMan#fire():68) - ...Firing: take-finally.sql
+2019-03-10 17:55:31,445 [main] INFO  (DfSqlFileRunnerBase#traceResult():172) -  -> success=0 failure=0
+2019-03-10 17:55:31,445 [main] INFO  (DfSqlFileFireMan#fire():93) - {Take Finally}: success=0 failure=0 (in 1 files)
+2019-03-10 17:55:31,447 [main] INFO  (DfDataSourceHandler#destroy():120) - ...closeReally()
+2019-03-10 17:55:31,452 [main] INFO  (DfDBFluteTaskUtil#logFinalMessage():139) - 
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+[Final Message]: 00m02s444ms
+
+  DBFLUTE_CLIENT: {spring-dbflute}
+    database  = mysql (MySQL 5.7.12)
+    language  = java
+    container = spring
+    package   = org.docksidestage.dbflute
+
+  DBFLUTE_ENVIRONMENT_TYPE: {}
+    driver = com.mysql.jdbc.Driver
+    url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+    schema = {spring-dbflute-db.$$NoNameSchema$$ as main}
+    user   = spring-dbflute-user
+    props  = {}
+    additionalSchema = 
+    repsEnvType      = ut
+    refreshProject   = $$AutoDetect$$
+
+ {Create Schema}: success=45 failure=0 (in 1 files)
+  o replace-schema.sql
+
+ {Load Data}: loaded-files=0
+  - (no data file)
+
+ {Take Finally}: success=0 failure=0 (in 1 files)
+  o take-finally.sql
+_/_/_/_/_/_/_/_/_/_/ {ReplaceSchema}
+2019-03-10 17:56:12,323 [main] INFO  (DfReplaceSchemaTask#begin():92) - +------------------------------------------+
+2019-03-10 17:56:12,327 [main] INFO  (DfReplaceSchemaTask#begin():93) - |                                          |
+2019-03-10 17:56:12,327 [main] INFO  (DfReplaceSchemaTask#begin():94) - |              ReplaceSchema               |
+2019-03-10 17:56:12,332 [main] INFO  (DfReplaceSchemaTask#begin():102) - |                                          |
+2019-03-10 17:56:12,332 [main] INFO  (DfReplaceSchemaTask#begin():103) - +------------------------------------------+
+2019-03-10 17:56:12,333 [main] INFO  (DfReplaceSchemaTask#waitBeforeReps():401) - ...Waiting for your GO SIGN from stdin before ReplaceSchema:
+2019-03-10 17:56:13,905 [main] INFO  (DfDataSourceHandler#prepare():78) - ...Preparing data source:
+2019-03-10 17:56:13,905 [main] INFO  (DfDataSourceHandler#prepare():79) -   driver = com.mysql.jdbc.Driver
+2019-03-10 17:56:13,906 [main] INFO  (DfDataSourceHandler#prepare():80) -   url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+2019-03-10 17:56:13,906 [main] INFO  (DfDataSourceHandler#prepare():81) -   user   = spring-dbflute-user
+2019-03-10 17:56:13,914 [main] INFO  (DfDataSourceHandler#createConnection():166) - ...Connecting to database by data source:
+2019-03-10 17:56:14,302 [main] INFO  (DfDataSourceHandler#setupConnectionMetaInfo():233) -   product = MySQL 5.7.12
+2019-03-10 17:56:14,303 [main] INFO  (DfDataSourceHandler#setupConnectionMetaInfo():234) -   driver  = MySQL Connector Java mysql-connector-java-5.1.46 ( Revision: 9cc87a48e75c2d2e87c1a293b2862ce651cb256e ) for JDBC 4.0
+2019-03-10 17:56:14,327 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():229) - 
+2019-03-10 17:56:14,328 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():230) - * * * * * * * * * * *
+2019-03-10 17:56:14,328 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():231) - *                   *
+2019-03-10 17:56:14,330 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():232) - * Initialize Schema *
+2019-03-10 17:56:14,336 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():233) - *                   *
+2019-03-10 17:56:14,336 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():234) - * * * * * * * * * * *
+2019-03-10 17:56:14,355 [main] INFO  (DfTableExtractor#doGetTableList():66) - ...Getting tables:
+2019-03-10 17:56:14,361 [main] INFO  (DfTableExtractor#doGetTableList():67) -   schema = {spring-dbflute-db.$$NoNameSchema$$ as main}
+2019-03-10 17:56:14,366 [main] INFO  (DfTableExtractor#doGetTableList():68) -   types  = [TABLE, VIEW]
+2019-03-10 17:56:14,462 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table MEMBER_ADDRESS
+2019-03-10 17:56:14,483 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table MEMBER_FOLLOWING
+2019-03-10 17:56:14,497 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table MEMBER_LOGIN
+2019-03-10 17:56:14,521 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table MEMBER_SECURITY
+2019-03-10 17:56:14,536 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table MEMBER_SERVICE
+2019-03-10 17:56:14,551 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table MEMBER_WITHDRAWAL
+2019-03-10 17:56:14,585 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table PURCHASE_PAYMENT
+2019-03-10 17:56:14,603 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER drop foreign key FK_MEMBER_MEMBER_STATUS
+2019-03-10 17:56:14,623 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_ADDRESS drop foreign key FK_MEMBER_ADDRESS_MEMBER
+2019-03-10 17:56:14,635 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_ADDRESS drop foreign key FK_MEMBER_ADDRESS_REGION
+2019-03-10 17:56:14,645 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_FOLLOWING drop foreign key FK_MEMBER_FOLLOWING_MY_MEMBER
+2019-03-10 17:56:14,655 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_FOLLOWING drop foreign key FK_MEMBER_FOLLOWING_YOUR_MEMBER
+2019-03-10 17:56:14,676 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_LOGIN drop foreign key FK_MEMBER_LOGIN_MEMBER_STATUS
+2019-03-10 17:56:14,691 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_LOGIN drop foreign key FK_MEMBER_LOGIN_MEMBER
+2019-03-10 17:56:14,700 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_SECURITY drop foreign key FK_MEMBER_SECURITY_MEMBER
+2019-03-10 17:56:14,724 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_SERVICE drop foreign key FK_MEMBER_SERVICE_MEMBER
+2019-03-10 17:56:14,746 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_SERVICE drop foreign key FK_MEMBER_SERVICE_SERVICE_RANK_CODE
+2019-03-10 17:56:14,768 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_WITHDRAWAL drop foreign key FK_MEMBER_WITHDRAWAL_MEMBER
+2019-03-10 17:56:14,778 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_WITHDRAWAL drop foreign key FK_MEMBER_WITHDRAWAL_WITHDRAWAL_REASON
+2019-03-10 17:56:14,792 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table PRODUCT drop foreign key FK_PRODUCT_PRODUCT_CATEGORY
+2019-03-10 17:56:14,802 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table PRODUCT drop foreign key FK_PRODUCT_PRODUCT_STATUS
+2019-03-10 17:56:14,821 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table PRODUCT_CATEGORY drop foreign key FK_PRODUCT_CATEGORY_PARENT
+2019-03-10 17:56:14,834 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table PURCHASE drop foreign key FK_PURCHASE_MEMBER
+2019-03-10 17:56:14,842 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table PURCHASE drop foreign key FK_PURCHASE_PRODUCT
+2019-03-10 17:56:14,850 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table PURCHASE_PAYMENT drop foreign key FK_PURCHASE_PAYMENT_PURCHASE
+2019-03-10 17:56:14,872 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER
+2019-03-10 17:56:14,882 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_ADDRESS
+2019-03-10 17:56:14,894 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_FOLLOWING
+2019-03-10 17:56:14,900 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_LOGIN
+2019-03-10 17:56:14,926 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_SECURITY
+2019-03-10 17:56:14,970 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_SERVICE
+2019-03-10 17:56:15,011 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_STATUS
+2019-03-10 17:56:15,030 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_WITHDRAWAL
+2019-03-10 17:56:15,051 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table PRODUCT
+2019-03-10 17:56:15,069 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table PRODUCT_CATEGORY
+2019-03-10 17:56:15,077 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table PRODUCT_STATUS
+2019-03-10 17:56:15,085 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table PURCHASE
+2019-03-10 17:56:15,092 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table PURCHASE_PAYMENT
+2019-03-10 17:56:15,099 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table REGION
+2019-03-10 17:56:15,105 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table SERVICE_RANK
+2019-03-10 17:56:15,127 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table WITHDRAWAL_REASON
+2019-03-10 17:56:15,189 [main] INFO  (DfCreateSchemaProcess#createSchema():266) - 
+2019-03-10 17:56:15,190 [main] INFO  (DfCreateSchemaProcess#createSchema():267) - * * * * * * * * *
+2019-03-10 17:56:15,191 [main] INFO  (DfCreateSchemaProcess#createSchema():268) - *               *
+2019-03-10 17:56:15,192 [main] INFO  (DfCreateSchemaProcess#createSchema():269) - * Create Schema *
+2019-03-10 17:56:15,192 [main] INFO  (DfCreateSchemaProcess#createSchema():270) - *               *
+2019-03-10 17:56:15,192 [main] INFO  (DfCreateSchemaProcess#createSchema():271) - * * * * * * * * *
+2019-03-10 17:56:15,197 [main] INFO  (DfSqlFileFireMan#fire():68) - ...Firing: replace-schema.sql
+2019-03-10 17:56:15,220 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER(
+    MEMBER_ID INTEGER AUTO_INCREMENT NOT NULL COMMENT '会員ID: mapStyle, map:{ sea = mystic ; land = oneman } そのまま書くぞー',
+    MEMBER_NAME VARCHAR(180) NOT NULL COMMENT '会員名称: mapStyle, map:\\{ sea \\= mystic \\; land \\= oneman \\} 記号をエスケープするぞー',
+    MEMBER_ACCOUNT VARCHAR(50) NOT NULL COMMENT '会員アカウント: ベタッと \'シングルクォーテーション\' で囲うぞー',
+    MEMBER_STATUS_CODE CHAR(3) NOT NULL COMMENT '会員ステータスコード',
+    FORMALIZED_DATETIME DATETIME COMMENT '正式会員日時: ベタッと <span>HTMLタグ</span> で囲うぞー',
+    BIRTHDATE DATE COMMENT '生年月日: ベタッと &lt;HTMLエスケープ表現&gt; で囲うぞー (もともとSchemaHTML的にダメみたい!?)',
+    REGISTER_DATETIME DATETIME NOT NULL COMMENT '登録日時: レコードが登録された日時。共通カラムの一つ。',
+    REGISTER_USER VARCHAR(200) NOT NULL COMMENT '登録ユーザ: レコードを登録したユーザ。共通カラムの一つ。',
+    UPDATE_DATETIME DATETIME NOT NULL COMMENT '更新日時: レコードが（最後に）更新された日時。共通カラムの一つ。',
+    UPDATE_USER VARCHAR(200) NOT NULL COMMENT '更新ユーザ: レコードを更新したユーザ。',
+    VERSION_NO BIGINT NOT NULL COMMENT 'バージョンNO: レコードのバージョンを示すNO。
+更新回数と等しく、主に排他制御のために利用される。',
+    PRIMARY KEY (MEMBER_ID),
+    UNIQUE (MEMBER_ACCOUNT)
+) COMMENT='会員: 会員のプロフィールやアカウントなどの基本情報を保持する。
+基本的に物理削除はなく、退会したらステータスが退会会員になる。
+ライフサイクルやカテゴリの違う会員情報は、one-to-oneなどの関連テーブルにて。
+
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+それにしても、めっちゃデコメントのテストするよ
+o mapStyle, map:{ sea = mystic ; land = oneman } そのまま書いても大丈夫？
+o mapStyle, map:\\{ sea \\= mystic \\; land \\= oneman \\} エスケープされてても大丈夫？
+o DBコメントで、ベタッと \'シングルクォーテーション\' で囲うけど大丈夫？
+o DBコメントで、ベタッと <span>HTMLタグ</span> で囲うけど大丈夫？
+o DBコメントで、ベタッと &lt;HTMLエスケープ表現&gt; で囲うけど大丈夫？ (もともとSchemaHTML的にダメみたい!?)
+_/_/_/_/_/_/_/_/_/_/
+
+※同じようなこと、カラムコメントの方でも試している。
+
+※それにしても MySQL さん、エスケープがバックスラッシュなので、
+create文の中では「バックスラッシュ+シングルクォーテーション」ってなるし、
+バックスラッシュ自体を使うなら「バックスラッシュ+バックスラッシュ」ってしないとね。
+'
+2019-03-10 17:56:15,291 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_ADDRESS(
+    MEMBER_ADDRESS_ID INTEGER AUTO_INCREMENT NOT NULL COMMENT '会員住所ID: 会員住所を識別するID。
+履歴分も含むテーブルなので、これ自体はFKではない。',
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID: 会員を参照するID。
+履歴分を含むため、これだけではユニークにはならない。',
+    VALID_BEGIN_DATE DATE NOT NULL COMMENT '有効開始日: 一つの有効期間の開始を示す日付。
+前の有効終了日の次の日の値が格納される。',
+    VALID_END_DATE DATE NOT NULL COMMENT '有効終了日: 有効期間の終了日。
+次の有効開始日の一日前の値が格納される。
+ただし、次の有効期間がない場合は 9999/12/31 となる。',
+    ADDRESS VARCHAR(200) NOT NULL COMMENT '住所: まるごと住所',
+    REGION_ID INTEGER NOT NULL COMMENT '地域ID: 地域を参照するID。
+ここでは特に住所の内容と連動しているわけではない。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (MEMBER_ADDRESS_ID),
+    UNIQUE (MEMBER_ID, VALID_BEGIN_DATE)
+) COMMENT='会員住所情報: 会員の住所に関する情報。
+同時に有効期間ごとに履歴管理されている。'
+2019-03-10 17:56:15,376 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_FOLLOWING(
+    MEMBER_FOLLOWING_ID BIGINT AUTO_INCREMENT NOT NULL COMMENT '会員フォローイングID: 連番',
+    MY_MEMBER_ID INTEGER NOT NULL COMMENT 'わたし: 気になった人がいて...勇気を振り絞った会員のID。',
+    YOUR_MEMBER_ID INTEGER NOT NULL COMMENT 'あなた: いきなりのアクションに...ちょっと心揺らいだ会員のID。',
+    FOLLOW_DATETIME DATETIME NOT NULL COMMENT 'その瞬間: ふりかえるとちょっと恥ずかしい気持ちになる日時',
+    PRIMARY KEY (MEMBER_FOLLOWING_ID),
+    UNIQUE (MY_MEMBER_ID, YOUR_MEMBER_ID)
+) COMMENT='会員フォローイング: とある会員が他の会員をフォローできる。すると、フォローした会員の購入履歴が閲覧できる。'
+2019-03-10 17:56:15,402 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_LOGIN(
+    MEMBER_LOGIN_ID BIGINT AUTO_INCREMENT NOT NULL COMMENT '会員ログインID',
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID',
+    LOGIN_DATETIME DATETIME NOT NULL COMMENT 'ログイン日時: ログインした瞬間の日時。',
+    MOBILE_LOGIN_FLG INTEGER NOT NULL COMMENT 'モバイルログインフラグ: モバイル機器からのログインか否か。',
+    LOGIN_MEMBER_STATUS_CODE CHAR(3) NOT NULL COMMENT 'ログイン会員ステータスコード: ログイン時の会員ステータス',
+    PRIMARY KEY (MEMBER_LOGIN_ID),
+    UNIQUE (MEMBER_ID, LOGIN_DATETIME)
+) COMMENT='会員ログイン情報: ログインするたびに登録されるログイン履歴。'
+2019-03-10 17:56:15,456 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_SECURITY(
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID: そのまま one-to-one を構成するためのFKとなる。',
+    LOGIN_PASSWORD VARCHAR(50) NOT NULL COMMENT 'ログインパスワード: ログイン時に利用するパスワード。
+本当は良くないが、Exampleなのでひとまず暗号化していない。',
+    REMINDER_QUESTION VARCHAR(50) NOT NULL COMMENT 'リマインダ質問: パスワードを忘れた際のリマインダ機能における質問の内容。',
+    REMINDER_ANSWER VARCHAR(50) NOT NULL COMMENT 'リマインダ回答: パスワードを忘れた際のリマインダ機能における質問の答え。',
+    REMINDER_USE_COUNT INTEGER NOT NULL COMMENT 'リマインダ利用回数: リマインダを利用した回数。
+多いと忘れっぽい会員と言えるが、
+そんなことを知ってもしょうがない。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (MEMBER_ID)
+) COMMENT='会員セキュリティ情報: 会員とは one-to-one で、会員一人につき必ず一つのセキュリティ情報がある'
+2019-03-10 17:56:15,514 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_SERVICE(
+    MEMBER_SERVICE_ID INTEGER AUTO_INCREMENT NOT NULL COMMENT '会員サービスID: 独立した主キーとなるが、実質的に会員IDとは one-to-one である。',
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID: 会員を参照するID。ユニークなので、会員とは one-to-one の関係に。',
+    SERVICE_POINT_COUNT INTEGER NOT NULL COMMENT 'サービスポイント数: 会員が現在利用できるサービスポイントの数。
+基本的に、購入時には増えてポイントを使ったら減る。',
+    SERVICE_RANK_CODE CHAR(3) NOT NULL COMMENT 'サービスランクコード: サービスランクを参照するコード。
+どんなランクがあるのかドキドキですね。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (MEMBER_SERVICE_ID),
+    UNIQUE (MEMBER_ID)
+) COMMENT='会員サービス: 会員のサービス情報（ポイントサービスなど）。'
+2019-03-10 17:56:15,536 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_WITHDRAWAL(
+    MEMBER_ID INTEGER NOT NULL,
+    WITHDRAWAL_REASON_CODE CHAR(3) COMMENT '退会理由コード: 退会した定型理由を参照するコード。
+何も言わずに退会する会員もいるので必須項目ではない。',
+    WITHDRAWAL_REASON_INPUT_TEXT TEXT COMMENT '退会理由入力テキスト: 会員がフリーテキストで入力できる退会理由。
+もう言いたいこと言ってもらう感じ。',
+    WITHDRAWAL_DATETIME DATETIME NOT NULL COMMENT '退会日時: 退会した瞬間の日時。
+正式会員日時と違い、こっちはone-to-oneの別テーブルで。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    PRIMARY KEY (MEMBER_ID)
+) COMMENT='会員退会情報: 退会会員の退会に関する詳細な情報。
+退会会員のみデータが存在する。'
+2019-03-10 17:56:15,588 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PURCHASE(
+    PURCHASE_ID BIGINT AUTO_INCREMENT NOT NULL COMMENT '購入ID: 連番',
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID: 会員を参照するID。
+購入を識別する自然キー（複合ユニーク制約）の筆頭要素。',
+    PRODUCT_ID INTEGER NOT NULL COMMENT '商品ID: 商品を参照するID。',
+    PURCHASE_DATETIME DATETIME NOT NULL COMMENT '購入日時: 購入した瞬間の日時。',
+    PURCHASE_COUNT INTEGER NOT NULL COMMENT '購入数量: 購入した商品の（一回の購入における）数量。',
+    PURCHASE_PRICE INTEGER NOT NULL COMMENT '購入価格: 購入によって実際に会員が支払った（支払う予定の）価格。
+基本は商品の定価に購入数量を掛けたものになるが、
+ポイント利用や割引があったりと必ずしもそうはならない。',
+    PAYMENT_COMPLETE_FLG INTEGER NOT NULL COMMENT '支払完了フラグ: この購入に関しての支払いが完了しているか否か。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (PURCHASE_ID),
+    UNIQUE (MEMBER_ID, PRODUCT_ID, PURCHASE_DATETIME),
+    KEY (MEMBER_ID),
+    KEY (PRODUCT_ID)
+) COMMENT='購入: 一つの商品に対する一回の購入を表現する。
+一回の購入で一つの商品を複数個買うこともある。'
+2019-03-10 17:56:15,646 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PURCHASE_PAYMENT(
+    PURCHASE_PAYMENT_ID BIGINT AUTO_INCREMENT NOT NULL COMMENT '購入支払ID: 連番',
+    PURCHASE_ID BIGINT NOT NULL COMMENT '購入ID: 支払い対象の購入へのID',
+    PAYMENT_AMOUNT DECIMAL(10,2) NOT NULL COMMENT '支払金額: 支払った金額。さて、小数点なのはなぜでしょう？',
+    PAYMENT_DATETIME DATETIME NOT NULL COMMENT '支払日時: 支払ったときの日時',
+    PAYMENT_METHOD_CODE CHAR(3) NOT NULL COMMENT '支払方法コード: 手渡しや銀行振込など',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    PRIMARY KEY (PURCHASE_PAYMENT_ID)
+) COMMENT='購入支払: 購入に対する支払。
+分割払いもできるのでmanyとなり、会員からの孫テーブルのテストができてうれしい。'
+2019-03-10 17:56:15,664 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PRODUCT(
+    PRODUCT_ID INTEGER AUTO_INCREMENT NOT NULL COMMENT '商品ID',
+    PRODUCT_NAME VARCHAR(50) NOT NULL COMMENT '商品名称',
+    PRODUCT_HANDLE_CODE VARCHAR(100) NOT NULL COMMENT '商品ハンドルコード: 商品を識別する業務上のコード。',
+    PRODUCT_CATEGORY_CODE CHAR(3) NOT NULL,
+    PRODUCT_STATUS_CODE CHAR(3) NOT NULL,
+    REGULAR_PRICE INTEGER NOT NULL COMMENT '定価: 特に割引などがない場合の販売価格',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (PRODUCT_ID),
+    UNIQUE (PRODUCT_HANDLE_CODE)
+) COMMENT='商品: 会員へ販売する商品のマスタ。
+販売可能なものだけでなく、生産中止や販売中止などの商品も含まれる。'
+2019-03-10 17:56:15,683 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PRODUCT_CATEGORY(
+    PRODUCT_CATEGORY_CODE CHAR(3) NOT NULL COMMENT '商品カテゴリコード',
+    PRODUCT_CATEGORY_NAME VARCHAR(50) NOT NULL COMMENT '商品カテゴリ名称',
+    PARENT_CATEGORY_CODE CHAR(3) COMMENT '親カテゴリコード: 最上位の場合はデータなし。',
+    PRIMARY KEY (PRODUCT_CATEGORY_CODE)
+) COMMENT='商品カテゴリ: 商品のカテゴリを表現するマスタ。
+自己参照の階層になっている。'
+2019-03-10 17:56:15,704 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PRODUCT_STATUS(
+    PRODUCT_STATUS_CODE CHAR(3) NOT NULL COMMENT '商品ステータスコード',
+    PRODUCT_STATUS_NAME VARCHAR(50) NOT NULL COMMENT '商品ステータス名称',
+    DISPLAY_ORDER INTEGER NOT NULL COMMENT '表示順',
+    PRIMARY KEY (PRODUCT_STATUS_CODE),
+    UNIQUE (DISPLAY_ORDER)
+) COMMENT='商品ステータス'
+2019-03-10 17:56:15,737 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table REGION(
+    REGION_ID INTEGER NOT NULL COMMENT '地域ID',
+    REGION_NAME VARCHAR(50) NOT NULL COMMENT '地域名称',
+    PRIMARY KEY (REGION_ID)
+) COMMENT='地域: 主に会員の住所に対応する地域。
+かなりざっくりした感じではある。'
+2019-03-10 17:56:15,767 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table SERVICE_RANK(
+    SERVICE_RANK_CODE CHAR(3) NOT NULL COMMENT 'サービスランクコード: サービスランクを識別するコード。',
+    SERVICE_RANK_NAME VARCHAR(50) NOT NULL COMMENT 'サービスランク名称: サービスランクの名称。
+（ゴールドとかプラチナとか基本的には威厳のある名前）',
+    SERVICE_POINT_INCIDENCE NUMERIC(5, 3) NOT NULL COMMENT 'サービスポイント発生率: 購入ごとのサービスポイントの発生率。
+購入価格にこの値をかけた数が発生ポイント。',
+    NEW_ACCEPTABLE_FLG INTEGER NOT NULL COMMENT '新規受け入れ可能フラグ: このランクへの新規受け入れができるかどうか。',
+    DESCRIPTION VARCHAR(200) NOT NULL,
+    DISPLAY_ORDER INTEGER NOT NULL,
+    PRIMARY KEY (SERVICE_RANK_CODE),
+    UNIQUE (DISPLAY_ORDER)
+) COMMENT='サービスランク: 会員のサービスレベルを表現するランク。
+（ゴールドとかプラチナとか）'
+2019-03-10 17:56:15,812 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_STATUS(
+    MEMBER_STATUS_CODE CHAR(3) NOT NULL COMMENT '会員ステータスコード: 会員ステータスを識別するコード。',
+    MEMBER_STATUS_NAME VARCHAR(50) NOT NULL COMMENT '会員ステータス名称',
+    DESCRIPTION VARCHAR(200) NOT NULL COMMENT '説明: 会員ステータスそれぞれの説明。
+気の利いた説明があるとディベロッパーがとても助かる。',
+    DISPLAY_ORDER INTEGER NOT NULL COMMENT '表示順: UI上のステータスの表示順を示すNO。
+並べるときは、このカラムに対して昇順のソート条件にする。',
+    PRIMARY KEY (MEMBER_STATUS_CODE),
+    UNIQUE (DISPLAY_ORDER)
+) COMMENT='会員ステータス'
+2019-03-10 17:56:15,830 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table WITHDRAWAL_REASON(
+    WITHDRAWAL_REASON_CODE CHAR(3) NOT NULL COMMENT '退会理由コード',
+    WITHDRAWAL_REASON_TEXT TEXT NOT NULL COMMENT '退会理由テキスト: 退会理由の内容。テキスト形式なので目いっぱい書けるが、
+そうするとUI側できれいに見せるのが大変でしょうね。',
+    DISPLAY_ORDER INTEGER NOT NULL COMMENT '表示順',
+    PRIMARY KEY (WITHDRAWAL_REASON_CODE),
+    UNIQUE (DISPLAY_ORDER)
+) COMMENT='退会理由: 会員に選ばせる定型的な退会理由のマスタ。'
+2019-03-10 17:56:15,869 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER add constraint FK_MEMBER_MEMBER_STATUS
+    foreign key (MEMBER_STATUS_CODE) references MEMBER_STATUS (MEMBER_STATUS_CODE)
+2019-03-10 17:56:15,909 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_ADDRESS add constraint FK_MEMBER_ADDRESS_MEMBER
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:56:15,955 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_ADDRESS add constraint FK_MEMBER_ADDRESS_REGION
+    foreign key (REGION_ID) references REGION (REGION_ID)
+2019-03-10 17:56:16,009 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_FOLLOWING add constraint FK_MEMBER_FOLLOWING_MY_MEMBER
+    foreign key (MY_MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:56:16,099 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_FOLLOWING add constraint FK_MEMBER_FOLLOWING_YOUR_MEMBER
+    foreign key (YOUR_MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:56:16,150 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_LOGIN add constraint FK_MEMBER_LOGIN_MEMBER_STATUS
+    foreign key (LOGIN_MEMBER_STATUS_CODE) references MEMBER_STATUS (MEMBER_STATUS_CODE)
+2019-03-10 17:56:16,204 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_LOGIN add constraint FK_MEMBER_LOGIN_MEMBER
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:56:16,255 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_SERVICE add constraint FK_MEMBER_SERVICE_MEMBER
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:56:16,306 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_SERVICE add constraint FK_MEMBER_SERVICE_SERVICE_RANK_CODE
+    foreign key (SERVICE_RANK_CODE) references SERVICE_RANK (SERVICE_RANK_CODE)
+2019-03-10 17:56:16,350 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_SECURITY add constraint FK_MEMBER_SECURITY_MEMBER
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:56:16,394 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_WITHDRAWAL add constraint FK_MEMBER_WITHDRAWAL_MEMBER
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:56:16,437 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_WITHDRAWAL add constraint FK_MEMBER_WITHDRAWAL_WITHDRAWAL_REASON
+    foreign key (WITHDRAWAL_REASON_CODE) references WITHDRAWAL_REASON (WITHDRAWAL_REASON_CODE)
+2019-03-10 17:56:16,486 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PURCHASE add constraint FK_PURCHASE_MEMBER
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:56:16,538 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PURCHASE add constraint FK_PURCHASE_PRODUCT
+    foreign key (PRODUCT_ID) references PRODUCT (PRODUCT_ID)
+2019-03-10 17:56:16,580 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PURCHASE_PAYMENT add constraint FK_PURCHASE_PAYMENT_PURCHASE
+    foreign key (PURCHASE_ID) references PURCHASE (PURCHASE_ID)
+2019-03-10 17:56:16,623 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PRODUCT add constraint FK_PRODUCT_PRODUCT_CATEGORY
+    foreign key (PRODUCT_CATEGORY_CODE) references PRODUCT_CATEGORY (PRODUCT_CATEGORY_CODE)
+2019-03-10 17:56:16,666 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PRODUCT add constraint FK_PRODUCT_PRODUCT_STATUS
+    foreign key (PRODUCT_STATUS_CODE) references PRODUCT_STATUS (PRODUCT_STATUS_CODE)
+2019-03-10 17:56:16,723 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PRODUCT_CATEGORY add constraint FK_PRODUCT_CATEGORY_PARENT
+    foreign key (PARENT_CATEGORY_CODE) references PRODUCT_CATEGORY (PRODUCT_CATEGORY_CODE)
+2019-03-10 17:56:16,768 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_MEMBER_NAME ON MEMBER(MEMBER_NAME)
+2019-03-10 17:56:16,797 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_FORMALIZED_DATETIME ON MEMBER(FORMALIZED_DATETIME)
+2019-03-10 17:56:16,821 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_FOLLOWING_UNIQUE_REVERSE on MEMBER_FOLLOWING(YOUR_MEMBER_ID, MY_MEMBER_ID)
+2019-03-10 17:56:16,857 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_FOLLOWING_FOLLOW_DATETIME on MEMBER_FOLLOWING(FOLLOW_DATETIME)
+2019-03-10 17:56:16,870 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_LOGIN_DATETIME ON MEMBER_LOGIN(LOGIN_DATETIME)
+2019-03-10 17:56:16,890 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_SERVICE_POINT_COUNT ON MEMBER_SERVICE(SERVICE_POINT_COUNT)
+2019-03-10 17:56:16,905 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PURCHASE_PRODUCT_DATETIME ON PURCHASE(PRODUCT_ID, PURCHASE_DATETIME)
+2019-03-10 17:56:16,970 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PURCHASE_DATETIME_MEMBER ON PURCHASE(PURCHASE_DATETIME, MEMBER_ID)
+2019-03-10 17:56:17,027 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PURCHASE_PRICE ON PURCHASE(PURCHASE_PRICE)
+2019-03-10 17:56:17,066 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PURCHASE_PAYMENT_DATETIME on PURCHASE_PAYMENT(PAYMENT_DATETIME, PAYMENT_AMOUNT)
+2019-03-10 17:56:17,090 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PRODUCT_PRODUCT_NAME ON PRODUCT(PRODUCT_NAME)
+2019-03-10 17:56:17,107 [main] INFO  (DfSqlFileRunnerBase#traceResult():172) -  -> success=45 failure=0
+2019-03-10 17:56:17,107 [main] INFO  (DfSqlFileFireMan#fire():93) - {Create Schema}: success=45 failure=0 (in 1 files)
+2019-03-10 17:56:17,220 [main] INFO  (DfLoadDataProcess#execute():130) - 
+2019-03-10 17:56:17,221 [main] INFO  (DfLoadDataProcess#execute():131) - * * * * * * * * * * *
+2019-03-10 17:56:17,221 [main] INFO  (DfLoadDataProcess#execute():132) - *                   *
+2019-03-10 17:56:17,222 [main] INFO  (DfLoadDataProcess#execute():133) - * Load Data         *
+2019-03-10 17:56:17,222 [main] INFO  (DfLoadDataProcess#execute():134) - *                   *
+2019-03-10 17:56:17,222 [main] INFO  (DfLoadDataProcess#execute():135) - * * * * * * * * * * *
+2019-03-10 17:56:17,247 [main] INFO  (DfTakeFinallyProcess#takeFinally():237) - 
+2019-03-10 17:56:17,247 [main] INFO  (DfTakeFinallyProcess#takeFinally():238) - * * * * * * * **
+2019-03-10 17:56:17,248 [main] INFO  (DfTakeFinallyProcess#takeFinally():239) - *              *
+2019-03-10 17:56:17,248 [main] INFO  (DfTakeFinallyProcess#takeFinally():240) - * Take Finally *
+2019-03-10 17:56:17,248 [main] INFO  (DfTakeFinallyProcess#takeFinally():241) - *              *
+2019-03-10 17:56:17,248 [main] INFO  (DfTakeFinallyProcess#takeFinally():242) - * * * * * * * **
+2019-03-10 17:56:17,299 [main] INFO  (DfSqlFileFireMan#fire():68) - ...Firing: take-finally.sql
+2019-03-10 17:56:17,303 [main] INFO  (DfSqlFileRunnerBase#traceResult():172) -  -> success=0 failure=0
+2019-03-10 17:56:17,303 [main] INFO  (DfSqlFileFireMan#fire():93) - {Take Finally}: success=0 failure=0 (in 1 files)
+2019-03-10 17:56:17,305 [main] INFO  (DfDataSourceHandler#destroy():120) - ...closeReally()
+2019-03-10 17:56:17,316 [main] INFO  (DfDBFluteTaskUtil#logFinalMessage():139) - 
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+[Final Message]: 00m05s010ms
+
+  DBFLUTE_CLIENT: {spring-dbflute}
+    database  = mysql (MySQL 5.7.12)
+    language  = java
+    container = spring
+    package   = org.docksidestage.dbflute
+
+  DBFLUTE_ENVIRONMENT_TYPE: {}
+    driver = com.mysql.jdbc.Driver
+    url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+    schema = {spring-dbflute-db.$$NoNameSchema$$ as main}
+    user   = spring-dbflute-user
+    props  = {}
+    additionalSchema = 
+    repsEnvType      = ut
+    refreshProject   = $$AutoDetect$$
+
+ {Create Schema}: success=45 failure=0 (in 1 files)
+  o replace-schema.sql
+
+ {Load Data}: loaded-files=0
+  - (no data file)
+
+ {Take Finally}: success=0 failure=0 (in 1 files)
+  o take-finally.sql
+_/_/_/_/_/_/_/_/_/_/ {ReplaceSchema}
+2019-03-10 17:56:48,342 [main] INFO  (DfReplaceSchemaTask#begin():92) - +------------------------------------------+
+2019-03-10 17:56:48,355 [main] INFO  (DfReplaceSchemaTask#begin():93) - |                                          |
+2019-03-10 17:56:48,356 [main] INFO  (DfReplaceSchemaTask#begin():94) - |              ReplaceSchema               |
+2019-03-10 17:56:48,415 [main] INFO  (DfReplaceSchemaTask#begin():102) - |                                          |
+2019-03-10 17:56:48,418 [main] INFO  (DfReplaceSchemaTask#begin():103) - +------------------------------------------+
+2019-03-10 17:56:48,420 [main] INFO  (DfReplaceSchemaTask#waitBeforeReps():401) - ...Waiting for your GO SIGN from stdin before ReplaceSchema:
+2019-03-10 17:57:20,559 [main] INFO  (DfDataSourceHandler#prepare():78) - ...Preparing data source:
+2019-03-10 17:57:20,560 [main] INFO  (DfDataSourceHandler#prepare():79) -   driver = com.mysql.jdbc.Driver
+2019-03-10 17:57:20,560 [main] INFO  (DfDataSourceHandler#prepare():80) -   url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+2019-03-10 17:57:20,560 [main] INFO  (DfDataSourceHandler#prepare():81) -   user   = spring-dbflute-user
+2019-03-10 17:57:20,574 [main] INFO  (DfDataSourceHandler#createConnection():166) - ...Connecting to database by data source:
+2019-03-10 17:57:21,054 [main] INFO  (DfDataSourceHandler#setupConnectionMetaInfo():233) -   product = MySQL 5.7.12
+2019-03-10 17:57:21,055 [main] INFO  (DfDataSourceHandler#setupConnectionMetaInfo():234) -   driver  = MySQL Connector Java mysql-connector-java-5.1.46 ( Revision: 9cc87a48e75c2d2e87c1a293b2862ce651cb256e ) for JDBC 4.0
+2019-03-10 17:57:21,092 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():229) - 
+2019-03-10 17:57:21,098 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():230) - * * * * * * * * * * *
+2019-03-10 17:57:21,100 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():231) - *                   *
+2019-03-10 17:57:21,118 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():232) - * Initialize Schema *
+2019-03-10 17:57:21,121 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():233) - *                   *
+2019-03-10 17:57:21,121 [main] INFO  (DfCreateSchemaProcess#initializeSchemaMainDrop():234) - * * * * * * * * * * *
+2019-03-10 17:57:21,145 [main] INFO  (DfTableExtractor#doGetTableList():66) - ...Getting tables:
+2019-03-10 17:57:21,147 [main] INFO  (DfTableExtractor#doGetTableList():67) -   schema = {spring-dbflute-db.$$NoNameSchema$$ as main}
+2019-03-10 17:57:21,148 [main] INFO  (DfTableExtractor#doGetTableList():68) -   types  = [TABLE, VIEW]
+2019-03-10 17:57:21,278 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table MEMBER_ADDRESS
+2019-03-10 17:57:21,306 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table MEMBER_FOLLOWING
+2019-03-10 17:57:21,332 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table MEMBER_LOGIN
+2019-03-10 17:57:21,371 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table MEMBER_SECURITY
+2019-03-10 17:57:21,390 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table MEMBER_SERVICE
+2019-03-10 17:57:21,423 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table MEMBER_WITHDRAWAL
+2019-03-10 17:57:21,465 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - truncate table PURCHASE_PAYMENT
+2019-03-10 17:57:21,604 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER drop foreign key FK_MEMBER_MEMBER_STATUS
+2019-03-10 17:57:21,617 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_ADDRESS drop foreign key FK_MEMBER_ADDRESS_MEMBER
+2019-03-10 17:57:21,630 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_ADDRESS drop foreign key FK_MEMBER_ADDRESS_REGION
+2019-03-10 17:57:21,647 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_FOLLOWING drop foreign key FK_MEMBER_FOLLOWING_MY_MEMBER
+2019-03-10 17:57:21,670 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_FOLLOWING drop foreign key FK_MEMBER_FOLLOWING_YOUR_MEMBER
+2019-03-10 17:57:21,687 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_LOGIN drop foreign key FK_MEMBER_LOGIN_MEMBER_STATUS
+2019-03-10 17:57:21,696 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_LOGIN drop foreign key FK_MEMBER_LOGIN_MEMBER
+2019-03-10 17:57:21,718 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_SECURITY drop foreign key FK_MEMBER_SECURITY_MEMBER
+2019-03-10 17:57:21,738 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_SERVICE drop foreign key FK_MEMBER_SERVICE_MEMBER
+2019-03-10 17:57:21,748 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_SERVICE drop foreign key FK_MEMBER_SERVICE_SERVICE_RANK_CODE
+2019-03-10 17:57:21,780 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_WITHDRAWAL drop foreign key FK_MEMBER_WITHDRAWAL_MEMBER
+2019-03-10 17:57:21,797 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table MEMBER_WITHDRAWAL drop foreign key FK_MEMBER_WITHDRAWAL_WITHDRAWAL_REASON
+2019-03-10 17:57:21,826 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table PRODUCT drop foreign key FK_PRODUCT_PRODUCT_CATEGORY
+2019-03-10 17:57:21,844 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table PRODUCT drop foreign key FK_PRODUCT_PRODUCT_STATUS
+2019-03-10 17:57:21,852 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table PRODUCT_CATEGORY drop foreign key FK_PRODUCT_CATEGORY_PARENT
+2019-03-10 17:57:21,871 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table PURCHASE drop foreign key FK_PURCHASE_MEMBER
+2019-03-10 17:57:21,881 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table PURCHASE drop foreign key FK_PURCHASE_PRODUCT
+2019-03-10 17:57:21,897 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - alter table PURCHASE_PAYMENT drop foreign key FK_PURCHASE_PAYMENT_PURCHASE
+2019-03-10 17:57:21,933 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER
+2019-03-10 17:57:21,943 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_ADDRESS
+2019-03-10 17:57:21,949 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_FOLLOWING
+2019-03-10 17:57:21,969 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_LOGIN
+2019-03-10 17:57:21,976 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_SECURITY
+2019-03-10 17:57:21,985 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_SERVICE
+2019-03-10 17:57:21,995 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_STATUS
+2019-03-10 17:57:22,026 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table MEMBER_WITHDRAWAL
+2019-03-10 17:57:22,042 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table PRODUCT
+2019-03-10 17:57:22,050 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table PRODUCT_CATEGORY
+2019-03-10 17:57:22,066 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table PRODUCT_STATUS
+2019-03-10 17:57:22,074 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table PURCHASE
+2019-03-10 17:57:22,082 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table PURCHASE_PAYMENT
+2019-03-10 17:57:22,090 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table REGION
+2019-03-10 17:57:22,095 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table SERVICE_RANK
+2019-03-10 17:57:22,103 [main] INFO  (DfSchemaInitializerJdbc#logReplaceSql():614) - drop table WITHDRAWAL_REASON
+2019-03-10 17:57:22,159 [main] INFO  (DfCreateSchemaProcess#createSchema():266) - 
+2019-03-10 17:57:22,160 [main] INFO  (DfCreateSchemaProcess#createSchema():267) - * * * * * * * * *
+2019-03-10 17:57:22,160 [main] INFO  (DfCreateSchemaProcess#createSchema():268) - *               *
+2019-03-10 17:57:22,161 [main] INFO  (DfCreateSchemaProcess#createSchema():269) - * Create Schema *
+2019-03-10 17:57:22,162 [main] INFO  (DfCreateSchemaProcess#createSchema():270) - *               *
+2019-03-10 17:57:22,163 [main] INFO  (DfCreateSchemaProcess#createSchema():271) - * * * * * * * * *
+2019-03-10 17:57:22,174 [main] INFO  (DfSqlFileFireMan#fire():68) - ...Firing: replace-schema.sql
+2019-03-10 17:57:22,210 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER(
+    MEMBER_ID INTEGER AUTO_INCREMENT NOT NULL COMMENT '会員ID: mapStyle, map:{ sea = mystic ; land = oneman } そのまま書くぞー',
+    MEMBER_NAME VARCHAR(180) NOT NULL COMMENT '会員名称: mapStyle, map:\\{ sea \\= mystic \\; land \\= oneman \\} 記号をエスケープするぞー',
+    MEMBER_ACCOUNT VARCHAR(50) NOT NULL COMMENT '会員アカウント: ベタッと \'シングルクォーテーション\' で囲うぞー',
+    MEMBER_STATUS_CODE CHAR(3) NOT NULL COMMENT '会員ステータスコード',
+    FORMALIZED_DATETIME DATETIME COMMENT '正式会員日時: ベタッと <span>HTMLタグ</span> で囲うぞー',
+    BIRTHDATE DATE COMMENT '生年月日: ベタッと &lt;HTMLエスケープ表現&gt; で囲うぞー (もともとSchemaHTML的にダメみたい!?)',
+    REGISTER_DATETIME DATETIME NOT NULL COMMENT '登録日時: レコードが登録された日時。共通カラムの一つ。',
+    REGISTER_USER VARCHAR(200) NOT NULL COMMENT '登録ユーザ: レコードを登録したユーザ。共通カラムの一つ。',
+    UPDATE_DATETIME DATETIME NOT NULL COMMENT '更新日時: レコードが（最後に）更新された日時。共通カラムの一つ。',
+    UPDATE_USER VARCHAR(200) NOT NULL COMMENT '更新ユーザ: レコードを更新したユーザ。',
+    VERSION_NO BIGINT NOT NULL COMMENT 'バージョンNO: レコードのバージョンを示すNO。
+更新回数と等しく、主に排他制御のために利用される。',
+    PRIMARY KEY (MEMBER_ID),
+    UNIQUE (MEMBER_ACCOUNT)
+) COMMENT='会員: 会員のプロフィールやアカウントなどの基本情報を保持する。
+基本的に物理削除はなく、退会したらステータスが退会会員になる。
+ライフサイクルやカテゴリの違う会員情報は、one-to-oneなどの関連テーブルにて。
+
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+それにしても、めっちゃデコメントのテストするよ
+o mapStyle, map:{ sea = mystic ; land = oneman } そのまま書いても大丈夫？
+o mapStyle, map:\\{ sea \\= mystic \\; land \\= oneman \\} エスケープされてても大丈夫？
+o DBコメントで、ベタッと \'シングルクォーテーション\' で囲うけど大丈夫？
+o DBコメントで、ベタッと <span>HTMLタグ</span> で囲うけど大丈夫？
+o DBコメントで、ベタッと &lt;HTMLエスケープ表現&gt; で囲うけど大丈夫？ (もともとSchemaHTML的にダメみたい!?)
+_/_/_/_/_/_/_/_/_/_/
+
+※同じようなこと、カラムコメントの方でも試している。
+
+※それにしても MySQL さん、エスケープがバックスラッシュなので、
+create文の中では「バックスラッシュ+シングルクォーテーション」ってなるし、
+バックスラッシュ自体を使うなら「バックスラッシュ+バックスラッシュ」ってしないとね。
+'
+2019-03-10 17:57:22,326 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_ADDRESS(
+    MEMBER_ADDRESS_ID INTEGER AUTO_INCREMENT NOT NULL COMMENT '会員住所ID: 会員住所を識別するID。
+履歴分も含むテーブルなので、これ自体はFKではない。',
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID: 会員を参照するID。
+履歴分を含むため、これだけではユニークにはならない。',
+    VALID_BEGIN_DATE DATE NOT NULL COMMENT '有効開始日: 一つの有効期間の開始を示す日付。
+前の有効終了日の次の日の値が格納される。',
+    VALID_END_DATE DATE NOT NULL COMMENT '有効終了日: 有効期間の終了日。
+次の有効開始日の一日前の値が格納される。
+ただし、次の有効期間がない場合は 9999/12/31 となる。',
+    ADDRESS VARCHAR(200) NOT NULL COMMENT '住所: まるごと住所',
+    REGION_ID INTEGER NOT NULL COMMENT '地域ID: 地域を参照するID。
+ここでは特に住所の内容と連動しているわけではない。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (MEMBER_ADDRESS_ID),
+    UNIQUE (MEMBER_ID, VALID_BEGIN_DATE)
+) COMMENT='会員住所情報: 会員の住所に関する情報。
+同時に有効期間ごとに履歴管理されている。'
+2019-03-10 17:57:22,385 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_FOLLOWING(
+    MEMBER_FOLLOWING_ID BIGINT AUTO_INCREMENT NOT NULL COMMENT '会員フォローイングID: 連番',
+    MY_MEMBER_ID INTEGER NOT NULL COMMENT 'わたし: 気になった人がいて...勇気を振り絞った会員のID。',
+    YOUR_MEMBER_ID INTEGER NOT NULL COMMENT 'あなた: いきなりのアクションに...ちょっと心揺らいだ会員のID。',
+    FOLLOW_DATETIME DATETIME NOT NULL COMMENT 'その瞬間: ふりかえるとちょっと恥ずかしい気持ちになる日時',
+    PRIMARY KEY (MEMBER_FOLLOWING_ID),
+    UNIQUE (MY_MEMBER_ID, YOUR_MEMBER_ID)
+) COMMENT='会員フォローイング: とある会員が他の会員をフォローできる。すると、フォローした会員の購入履歴が閲覧できる。'
+2019-03-10 17:57:22,411 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_LOGIN(
+    MEMBER_LOGIN_ID BIGINT AUTO_INCREMENT NOT NULL COMMENT '会員ログインID',
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID',
+    LOGIN_DATETIME DATETIME NOT NULL COMMENT 'ログイン日時: ログインした瞬間の日時。',
+    MOBILE_LOGIN_FLG INTEGER NOT NULL COMMENT 'モバイルログインフラグ: モバイル機器からのログインか否か。',
+    LOGIN_MEMBER_STATUS_CODE CHAR(3) NOT NULL COMMENT 'ログイン会員ステータスコード: ログイン時の会員ステータス',
+    PRIMARY KEY (MEMBER_LOGIN_ID),
+    UNIQUE (MEMBER_ID, LOGIN_DATETIME)
+) COMMENT='会員ログイン情報: ログインするたびに登録されるログイン履歴。'
+2019-03-10 17:57:22,465 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_SECURITY(
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID: そのまま one-to-one を構成するためのFKとなる。',
+    LOGIN_PASSWORD VARCHAR(50) NOT NULL COMMENT 'ログインパスワード: ログイン時に利用するパスワード。
+本当は良くないが、Exampleなのでひとまず暗号化していない。',
+    REMINDER_QUESTION VARCHAR(50) NOT NULL COMMENT 'リマインダ質問: パスワードを忘れた際のリマインダ機能における質問の内容。',
+    REMINDER_ANSWER VARCHAR(50) NOT NULL COMMENT 'リマインダ回答: パスワードを忘れた際のリマインダ機能における質問の答え。',
+    REMINDER_USE_COUNT INTEGER NOT NULL COMMENT 'リマインダ利用回数: リマインダを利用した回数。
+多いと忘れっぽい会員と言えるが、
+そんなことを知ってもしょうがない。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (MEMBER_ID)
+) COMMENT='会員セキュリティ情報: 会員とは one-to-one で、会員一人につき必ず一つのセキュリティ情報がある'
+2019-03-10 17:57:22,482 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_SERVICE(
+    MEMBER_SERVICE_ID INTEGER AUTO_INCREMENT NOT NULL COMMENT '会員サービスID: 独立した主キーとなるが、実質的に会員IDとは one-to-one である。',
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID: 会員を参照するID。ユニークなので、会員とは one-to-one の関係に。',
+    SERVICE_POINT_COUNT INTEGER NOT NULL COMMENT 'サービスポイント数: 会員が現在利用できるサービスポイントの数。
+基本的に、購入時には増えてポイントを使ったら減る。',
+    SERVICE_RANK_CODE CHAR(3) NOT NULL COMMENT 'サービスランクコード: サービスランクを参照するコード。
+どんなランクがあるのかドキドキですね。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (MEMBER_SERVICE_ID),
+    UNIQUE (MEMBER_ID)
+) COMMENT='会員サービス: 会員のサービス情報（ポイントサービスなど）。'
+2019-03-10 17:57:22,540 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_WITHDRAWAL(
+    MEMBER_ID INTEGER NOT NULL,
+    WITHDRAWAL_REASON_CODE CHAR(3) COMMENT '退会理由コード: 退会した定型理由を参照するコード。
+何も言わずに退会する会員もいるので必須項目ではない。',
+    WITHDRAWAL_REASON_INPUT_TEXT TEXT COMMENT '退会理由入力テキスト: 会員がフリーテキストで入力できる退会理由。
+もう言いたいこと言ってもらう感じ。',
+    WITHDRAWAL_DATETIME DATETIME NOT NULL COMMENT '退会日時: 退会した瞬間の日時。
+正式会員日時と違い、こっちはone-to-oneの別テーブルで。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    PRIMARY KEY (MEMBER_ID)
+) COMMENT='会員退会情報: 退会会員の退会に関する詳細な情報。
+退会会員のみデータが存在する。'
+2019-03-10 17:57:22,557 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PURCHASE(
+    PURCHASE_ID BIGINT AUTO_INCREMENT NOT NULL COMMENT '購入ID: 連番',
+    MEMBER_ID INTEGER NOT NULL COMMENT '会員ID: 会員を参照するID。
+購入を識別する自然キー（複合ユニーク制約）の筆頭要素。',
+    PRODUCT_ID INTEGER NOT NULL COMMENT '商品ID: 商品を参照するID。',
+    PURCHASE_DATETIME DATETIME NOT NULL COMMENT '購入日時: 購入した瞬間の日時。',
+    PURCHASE_COUNT INTEGER NOT NULL COMMENT '購入数量: 購入した商品の（一回の購入における）数量。',
+    PURCHASE_PRICE INTEGER NOT NULL COMMENT '購入価格: 購入によって実際に会員が支払った（支払う予定の）価格。
+基本は商品の定価に購入数量を掛けたものになるが、
+ポイント利用や割引があったりと必ずしもそうはならない。',
+    PAYMENT_COMPLETE_FLG INTEGER NOT NULL COMMENT '支払完了フラグ: この購入に関しての支払いが完了しているか否か。',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (PURCHASE_ID),
+    UNIQUE (MEMBER_ID, PRODUCT_ID, PURCHASE_DATETIME),
+    KEY (MEMBER_ID),
+    KEY (PRODUCT_ID)
+) COMMENT='購入: 一つの商品に対する一回の購入を表現する。
+一回の購入で一つの商品を複数個買うこともある。'
+2019-03-10 17:57:22,603 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PURCHASE_PAYMENT(
+    PURCHASE_PAYMENT_ID BIGINT AUTO_INCREMENT NOT NULL COMMENT '購入支払ID: 連番',
+    PURCHASE_ID BIGINT NOT NULL COMMENT '購入ID: 支払い対象の購入へのID',
+    PAYMENT_AMOUNT DECIMAL(10,2) NOT NULL COMMENT '支払金額: 支払った金額。さて、小数点なのはなぜでしょう？',
+    PAYMENT_DATETIME DATETIME NOT NULL COMMENT '支払日時: 支払ったときの日時',
+    PAYMENT_METHOD_CODE CHAR(3) NOT NULL COMMENT '支払方法コード: 手渡しや銀行振込など',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    PRIMARY KEY (PURCHASE_PAYMENT_ID)
+) COMMENT='購入支払: 購入に対する支払。
+分割払いもできるのでmanyとなり、会員からの孫テーブルのテストができてうれしい。'
+2019-03-10 17:57:22,620 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PRODUCT(
+    PRODUCT_ID INTEGER AUTO_INCREMENT NOT NULL COMMENT '商品ID',
+    PRODUCT_NAME VARCHAR(50) NOT NULL COMMENT '商品名称',
+    PRODUCT_HANDLE_CODE VARCHAR(100) NOT NULL COMMENT '商品ハンドルコード: 商品を識別する業務上のコード。',
+    PRODUCT_CATEGORY_CODE CHAR(3) NOT NULL,
+    PRODUCT_STATUS_CODE CHAR(3) NOT NULL,
+    REGULAR_PRICE INTEGER NOT NULL COMMENT '定価: 特に割引などがない場合の販売価格',
+    REGISTER_DATETIME DATETIME NOT NULL,
+    REGISTER_USER VARCHAR(200) NOT NULL,
+    UPDATE_DATETIME DATETIME NOT NULL,
+    UPDATE_USER VARCHAR(200) NOT NULL,
+    VERSION_NO BIGINT NOT NULL,
+    PRIMARY KEY (PRODUCT_ID),
+    UNIQUE (PRODUCT_HANDLE_CODE)
+) COMMENT='商品: 会員へ販売する商品のマスタ。
+販売可能なものだけでなく、生産中止や販売中止などの商品も含まれる。'
+2019-03-10 17:57:22,671 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PRODUCT_CATEGORY(
+    PRODUCT_CATEGORY_CODE CHAR(3) NOT NULL COMMENT '商品カテゴリコード',
+    PRODUCT_CATEGORY_NAME VARCHAR(50) NOT NULL COMMENT '商品カテゴリ名称',
+    PARENT_CATEGORY_CODE CHAR(3) COMMENT '親カテゴリコード: 最上位の場合はデータなし。',
+    PRIMARY KEY (PRODUCT_CATEGORY_CODE)
+) COMMENT='商品カテゴリ: 商品のカテゴリを表現するマスタ。
+自己参照の階層になっている。'
+2019-03-10 17:57:22,697 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table PRODUCT_STATUS(
+    PRODUCT_STATUS_CODE CHAR(3) NOT NULL COMMENT '商品ステータスコード',
+    PRODUCT_STATUS_NAME VARCHAR(50) NOT NULL COMMENT '商品ステータス名称',
+    DISPLAY_ORDER INTEGER NOT NULL COMMENT '表示順',
+    PRIMARY KEY (PRODUCT_STATUS_CODE),
+    UNIQUE (DISPLAY_ORDER)
+) COMMENT='商品ステータス'
+2019-03-10 17:57:22,717 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table REGION(
+    REGION_ID INTEGER NOT NULL COMMENT '地域ID',
+    REGION_NAME VARCHAR(50) NOT NULL COMMENT '地域名称',
+    PRIMARY KEY (REGION_ID)
+) COMMENT='地域: 主に会員の住所に対応する地域。
+かなりざっくりした感じではある。'
+2019-03-10 17:57:22,750 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table SERVICE_RANK(
+    SERVICE_RANK_CODE CHAR(3) NOT NULL COMMENT 'サービスランクコード: サービスランクを識別するコード。',
+    SERVICE_RANK_NAME VARCHAR(50) NOT NULL COMMENT 'サービスランク名称: サービスランクの名称。
+（ゴールドとかプラチナとか基本的には威厳のある名前）',
+    SERVICE_POINT_INCIDENCE NUMERIC(5, 3) NOT NULL COMMENT 'サービスポイント発生率: 購入ごとのサービスポイントの発生率。
+購入価格にこの値をかけた数が発生ポイント。',
+    NEW_ACCEPTABLE_FLG INTEGER NOT NULL COMMENT '新規受け入れ可能フラグ: このランクへの新規受け入れができるかどうか。',
+    DESCRIPTION VARCHAR(200) NOT NULL,
+    DISPLAY_ORDER INTEGER NOT NULL,
+    PRIMARY KEY (SERVICE_RANK_CODE),
+    UNIQUE (DISPLAY_ORDER)
+) COMMENT='サービスランク: 会員のサービスレベルを表現するランク。
+（ゴールドとかプラチナとか）'
+2019-03-10 17:57:22,769 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table MEMBER_STATUS(
+    MEMBER_STATUS_CODE CHAR(3) NOT NULL COMMENT '会員ステータスコード: 会員ステータスを識別するコード。',
+    MEMBER_STATUS_NAME VARCHAR(50) NOT NULL COMMENT '会員ステータス名称',
+    DESCRIPTION VARCHAR(200) NOT NULL COMMENT '説明: 会員ステータスそれぞれの説明。
+気の利いた説明があるとディベロッパーがとても助かる。',
+    DISPLAY_ORDER INTEGER NOT NULL COMMENT '表示順: UI上のステータスの表示順を示すNO。
+並べるときは、このカラムに対して昇順のソート条件にする。',
+    PRIMARY KEY (MEMBER_STATUS_CODE),
+    UNIQUE (DISPLAY_ORDER)
+) COMMENT='会員ステータス'
+2019-03-10 17:57:22,795 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+create table WITHDRAWAL_REASON(
+    WITHDRAWAL_REASON_CODE CHAR(3) NOT NULL COMMENT '退会理由コード',
+    WITHDRAWAL_REASON_TEXT TEXT NOT NULL COMMENT '退会理由テキスト: 退会理由の内容。テキスト形式なので目いっぱい書けるが、
+そうするとUI側できれいに見せるのが大変でしょうね。',
+    DISPLAY_ORDER INTEGER NOT NULL COMMENT '表示順',
+    PRIMARY KEY (WITHDRAWAL_REASON_CODE),
+    UNIQUE (DISPLAY_ORDER)
+) COMMENT='退会理由: 会員に選ばせる定型的な退会理由のマスタ。'
+2019-03-10 17:57:22,816 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER add constraint FK_MEMBER_MEMBER_STATUS
+    foreign key (MEMBER_STATUS_CODE) references MEMBER_STATUS (MEMBER_STATUS_CODE)
+2019-03-10 17:57:22,865 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_ADDRESS add constraint FK_MEMBER_ADDRESS_MEMBER
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:57:22,970 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_ADDRESS add constraint FK_MEMBER_ADDRESS_REGION
+    foreign key (REGION_ID) references REGION (REGION_ID)
+2019-03-10 17:57:23,039 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_FOLLOWING add constraint FK_MEMBER_FOLLOWING_MY_MEMBER
+    foreign key (MY_MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:57:23,078 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_FOLLOWING add constraint FK_MEMBER_FOLLOWING_YOUR_MEMBER
+    foreign key (YOUR_MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:57:23,138 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_LOGIN add constraint FK_MEMBER_LOGIN_MEMBER_STATUS
+    foreign key (LOGIN_MEMBER_STATUS_CODE) references MEMBER_STATUS (MEMBER_STATUS_CODE)
+2019-03-10 17:57:23,174 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_LOGIN add constraint FK_MEMBER_LOGIN_MEMBER
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:57:23,231 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_SERVICE add constraint FK_MEMBER_SERVICE_MEMBER
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:57:23,279 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_SERVICE add constraint FK_MEMBER_SERVICE_SERVICE_RANK_CODE
+    foreign key (SERVICE_RANK_CODE) references SERVICE_RANK (SERVICE_RANK_CODE)
+2019-03-10 17:57:23,331 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_SECURITY add constraint FK_MEMBER_SECURITY_MEMBER
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:57:23,388 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_WITHDRAWAL add constraint FK_MEMBER_WITHDRAWAL_MEMBER
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:57:23,422 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table MEMBER_WITHDRAWAL add constraint FK_MEMBER_WITHDRAWAL_WITHDRAWAL_REASON
+    foreign key (WITHDRAWAL_REASON_CODE) references WITHDRAWAL_REASON (WITHDRAWAL_REASON_CODE)
+2019-03-10 17:57:23,480 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PURCHASE add constraint FK_PURCHASE_MEMBER
+    foreign key (MEMBER_ID) references MEMBER (MEMBER_ID)
+2019-03-10 17:57:23,515 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PURCHASE add constraint FK_PURCHASE_PRODUCT
+    foreign key (PRODUCT_ID) references PRODUCT (PRODUCT_ID)
+2019-03-10 17:57:23,563 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PURCHASE_PAYMENT add constraint FK_PURCHASE_PAYMENT_PURCHASE
+    foreign key (PURCHASE_ID) references PURCHASE (PURCHASE_ID)
+2019-03-10 17:57:23,604 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PRODUCT add constraint FK_PRODUCT_PRODUCT_CATEGORY
+    foreign key (PRODUCT_CATEGORY_CODE) references PRODUCT_CATEGORY (PRODUCT_CATEGORY_CODE)
+2019-03-10 17:57:23,647 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PRODUCT add constraint FK_PRODUCT_PRODUCT_STATUS
+    foreign key (PRODUCT_STATUS_CODE) references PRODUCT_STATUS (PRODUCT_STATUS_CODE)
+2019-03-10 17:57:23,694 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - 
+alter table PRODUCT_CATEGORY add constraint FK_PRODUCT_CATEGORY_PARENT
+    foreign key (PARENT_CATEGORY_CODE) references PRODUCT_CATEGORY (PRODUCT_CATEGORY_CODE)
+2019-03-10 17:57:23,739 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_MEMBER_NAME ON MEMBER(MEMBER_NAME)
+2019-03-10 17:57:23,780 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_FORMALIZED_DATETIME ON MEMBER(FORMALIZED_DATETIME)
+2019-03-10 17:57:23,806 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_FOLLOWING_UNIQUE_REVERSE on MEMBER_FOLLOWING(YOUR_MEMBER_ID, MY_MEMBER_ID)
+2019-03-10 17:57:23,853 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_FOLLOWING_FOLLOW_DATETIME on MEMBER_FOLLOWING(FOLLOW_DATETIME)
+2019-03-10 17:57:23,885 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_LOGIN_DATETIME ON MEMBER_LOGIN(LOGIN_DATETIME)
+2019-03-10 17:57:23,913 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_MEMBER_SERVICE_POINT_COUNT ON MEMBER_SERVICE(SERVICE_POINT_COUNT)
+2019-03-10 17:57:23,938 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PURCHASE_PRODUCT_DATETIME ON PURCHASE(PRODUCT_ID, PURCHASE_DATETIME)
+2019-03-10 17:57:23,951 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PURCHASE_DATETIME_MEMBER ON PURCHASE(PURCHASE_DATETIME, MEMBER_ID)
+2019-03-10 17:57:23,976 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PURCHASE_PRICE ON PURCHASE(PURCHASE_PRICE)
+2019-03-10 17:57:24,002 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PURCHASE_PAYMENT_DATETIME on PURCHASE_PAYMENT(PAYMENT_DATETIME, PAYMENT_AMOUNT)
+2019-03-10 17:57:24,029 [main] INFO  (DfSqlFileRunnerBase#traceSql():168) - create index IX_PRODUCT_PRODUCT_NAME ON PRODUCT(PRODUCT_NAME)
+2019-03-10 17:57:24,045 [main] INFO  (DfSqlFileRunnerBase#traceResult():172) -  -> success=45 failure=0
+2019-03-10 17:57:24,045 [main] INFO  (DfSqlFileFireMan#fire():93) - {Create Schema}: success=45 failure=0 (in 1 files)
+2019-03-10 17:57:24,178 [main] INFO  (DfLoadDataProcess#execute():130) - 
+2019-03-10 17:57:24,178 [main] INFO  (DfLoadDataProcess#execute():131) - * * * * * * * * * * *
+2019-03-10 17:57:24,178 [main] INFO  (DfLoadDataProcess#execute():132) - *                   *
+2019-03-10 17:57:24,178 [main] INFO  (DfLoadDataProcess#execute():133) - * Load Data         *
+2019-03-10 17:57:24,179 [main] INFO  (DfLoadDataProcess#execute():134) - *                   *
+2019-03-10 17:57:24,179 [main] INFO  (DfLoadDataProcess#execute():135) - * * * * * * * * * * *
+2019-03-10 17:57:24,211 [main] INFO  (DfTakeFinallyProcess#takeFinally():237) - 
+2019-03-10 17:57:24,211 [main] INFO  (DfTakeFinallyProcess#takeFinally():238) - * * * * * * * **
+2019-03-10 17:57:24,212 [main] INFO  (DfTakeFinallyProcess#takeFinally():239) - *              *
+2019-03-10 17:57:24,212 [main] INFO  (DfTakeFinallyProcess#takeFinally():240) - * Take Finally *
+2019-03-10 17:57:24,212 [main] INFO  (DfTakeFinallyProcess#takeFinally():241) - *              *
+2019-03-10 17:57:24,213 [main] INFO  (DfTakeFinallyProcess#takeFinally():242) - * * * * * * * **
+2019-03-10 17:57:24,223 [main] INFO  (DfSqlFileFireMan#fire():68) - ...Firing: take-finally.sql
+2019-03-10 17:57:24,231 [main] INFO  (DfSqlFileRunnerBase#traceResult():172) -  -> success=0 failure=0
+2019-03-10 17:57:24,232 [main] INFO  (DfSqlFileFireMan#fire():93) - {Take Finally}: success=0 failure=0 (in 1 files)
+2019-03-10 17:57:24,234 [main] INFO  (DfDataSourceHandler#destroy():120) - ...closeReally()
+2019-03-10 17:57:24,241 [main] INFO  (DfDBFluteTaskUtil#logFinalMessage():139) - 
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+[Final Message]: 00m35s933ms
+
+  DBFLUTE_CLIENT: {spring-dbflute}
+    database  = mysql (MySQL 5.7.12)
+    language  = java
+    container = spring
+    package   = org.docksidestage.dbflute
+
+  DBFLUTE_ENVIRONMENT_TYPE: {}
+    driver = com.mysql.jdbc.Driver
+    url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+    schema = {spring-dbflute-db.$$NoNameSchema$$ as main}
+    user   = spring-dbflute-user
+    props  = {}
+    additionalSchema = 
+    repsEnvType      = ut
+    refreshProject   = $$AutoDetect$$
+
+ {Create Schema}: success=45 failure=0 (in 1 files)
+  o replace-schema.sql
+
+ {Load Data}: loaded-files=0
+  - (no data file)
+
+ {Take Finally}: success=0 failure=0 (in 1 files)
+  o take-finally.sql
+_/_/_/_/_/_/_/_/_/_/ {ReplaceSchema}
+2019-03-10 17:57:25,102 [main] INFO  (TorqueJDBCTransformTask#begin():104) - +------------------------------------------+
+2019-03-10 17:57:25,105 [main] INFO  (TorqueJDBCTransformTask#begin():105) - |                                          |
+2019-03-10 17:57:25,106 [main] INFO  (TorqueJDBCTransformTask#begin():106) - |                   JDBC                   |
+2019-03-10 17:57:25,106 [main] INFO  (TorqueJDBCTransformTask#begin():107) - |                                          |
+2019-03-10 17:57:25,106 [main] INFO  (TorqueJDBCTransformTask#begin():108) - +------------------------------------------+
+2019-03-10 17:57:25,154 [main] INFO  (DfDataSourceHandler#prepare():78) - ...Preparing data source:
+2019-03-10 17:57:25,166 [main] INFO  (DfDataSourceHandler#prepare():79) -   driver = com.mysql.jdbc.Driver
+2019-03-10 17:57:25,167 [main] INFO  (DfDataSourceHandler#prepare():80) -   url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+2019-03-10 17:57:25,169 [main] INFO  (DfDataSourceHandler#prepare():81) -   user   = spring-dbflute-user
+2019-03-10 17:57:25,279 [main] INFO  (DfSchemaXmlSerializer#serialize():286) - 
+2019-03-10 17:57:25,280 [main] INFO  (DfSchemaXmlSerializer#serialize():287) - ...Starting to process JDBC to SchemaXML
+2019-03-10 17:57:25,280 [main] INFO  (DfSchemaXmlSerializer#doLoadPreviousSchema():1532) - ...Loading previous schema (schema diff process)
+2019-03-10 17:57:25,298 [main] INFO  (DfSchemaXmlSerializer#doLoadPreviousSchema():1535) -  -> no previous (first time)
+2019-03-10 17:57:25,319 [main] INFO  (DfSchemaXmlSerializer#generateXML():360) - ...Getting DB connection
+2019-03-10 17:57:25,333 [main] INFO  (DfDataSourceHandler#createConnection():166) - ...Connecting to database by data source:
+2019-03-10 17:57:25,667 [main] INFO  (DfDataSourceHandler#setupConnectionMetaInfo():233) -   product = MySQL 5.7.12
+2019-03-10 17:57:25,668 [main] INFO  (DfDataSourceHandler#setupConnectionMetaInfo():234) -   driver  = MySQL Connector Java mysql-connector-java-5.1.46 ( Revision: 9cc87a48e75c2d2e87c1a293b2862ce651cb256e ) for JDBC 4.0
+2019-03-10 17:57:25,669 [main] INFO  (DfSchemaXmlSerializer#generateXML():363) - ...Getting DB meta data
+2019-03-10 17:57:25,671 [main] INFO  (DfTableExtractor#doGetTableList():66) - ...Getting tables:
+2019-03-10 17:57:25,671 [main] INFO  (DfTableExtractor#doGetTableList():67) -   schema = {spring-dbflute-db.$$NoNameSchema$$ as main}
+2019-03-10 17:57:25,671 [main] INFO  (DfTableExtractor#doGetTableList():68) -   types  = [TABLE, VIEW]
+2019-03-10 17:57:25,682 [main] INFO  (DfDbCommentExtractorBase#doSelectUserTabComments():121) - select table_type as OBJECT_TYPE, table_name as TABLE_NAME, table_comment as COMMENTS from information_schema.tables where table_schema = 'spring-dbflute-db' order by table_name asc
+2019-03-10 17:57:25,697 [main] INFO  (DfDbCommentExtractorBase#doSelectUserColComments():168) - select table_name as TABLE_NAME, column_name as COLUMN_NAME, column_comment as COMMENTS from information_schema.columns where table_schema = 'spring-dbflute-db' order by table_name asc, column_name asc
+2019-03-10 17:57:25,713 [main] INFO  (DfDatetimePrecisionExtractorMySQL#extractDatetimePrecisionMap():59) - select TABLE_NAME, COLUMN_NAME, DATETIME_PRECISION from INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = 'spring-dbflute-db' and DATA_TYPE = 'datetime'
+2019-03-10 17:57:25,762 [main] INFO  (DfSchemaXmlSerializer#processTable():420) - 
+2019-03-10 17:57:25,762 [main] INFO  (DfSchemaXmlSerializer#processTable():421) - $ /= = = = = = = = = = = = = = = = = = = = = = = = = =
+2019-03-10 17:57:25,762 [main] INFO  (DfSchemaXmlSerializer#processTable():422) - $ [Table List]
+2019-03-10 17:57:25,763 [main] INFO  (DfSchemaXmlSerializer#doProcessTable():502) - $ spring-dbflute-db.MEMBER(TABLE) // 会員: 会員のプロフィールやアカウントなどの基本情報を保持する。...
+2019-03-10 17:57:25,856 [main] INFO  (DfSchemaXmlSerializer#doProcessTable():502) - $ spring-dbflute-db.MEMBER_ADDRESS(TABLE) // 会員住所情報: 会員の住所に関する情報。...
+2019-03-10 17:57:25,874 [main] INFO  (DfSchemaXmlSerializer#doProcessTable():502) - $ spring-dbflute-db.MEMBER_FOLLOWING(TABLE) // 会員フォローイング: とある会員が他の会員をフォローできる。すると、フォローした会員の購入履歴が閲覧できる。
+2019-03-10 17:57:25,899 [main] INFO  (DfSchemaXmlSerializer#doProcessTable():502) - $ spring-dbflute-db.MEMBER_LOGIN(TABLE) // 会員ログイン情報: ログインするたびに登録されるログイン履歴。
+2019-03-10 17:57:25,983 [main] INFO  (DfSchemaXmlSerializer#doProcessTable():502) - $ spring-dbflute-db.MEMBER_SECURITY(TABLE) // 会員セキュリティ情報: 会員とは one-to-one で、会員一人につき必ず一つのセキュリティ情報がある
+2019-03-10 17:57:26,043 [main] INFO  (DfSchemaXmlSerializer#doProcessTable():502) - $ spring-dbflute-db.MEMBER_SERVICE(TABLE) // 会員サービス: 会員のサービス情報（ポイントサービスなど）。
+2019-03-10 17:57:26,072 [main] INFO  (DfSchemaXmlSerializer#doProcessTable():502) - $ spring-dbflute-db.MEMBER_STATUS(TABLE) // 会員ステータス
+2019-03-10 17:57:26,095 [main] INFO  (DfSchemaXmlSerializer#doProcessTable():502) - $ spring-dbflute-db.MEMBER_WITHDRAWAL(TABLE) // 会員退会情報: 退会会員の退会に関する詳細な情報。...
+2019-03-10 17:57:26,145 [main] INFO  (DfSchemaXmlSerializer#doProcessTable():502) - $ spring-dbflute-db.PRODUCT(TABLE) // 商品: 会員へ販売する商品のマスタ。...
+2019-03-10 17:57:26,183 [main] INFO  (DfSchemaXmlSerializer#doProcessTable():502) - $ spring-dbflute-db.PRODUCT_CATEGORY(TABLE) // 商品カテゴリ: 商品のカテゴリを表現するマスタ。...
+2019-03-10 17:57:26,202 [main] INFO  (DfSchemaXmlSerializer#doProcessTable():502) - $ spring-dbflute-db.PRODUCT_STATUS(TABLE) // 商品ステータス
+2019-03-10 17:57:26,228 [main] INFO  (DfSchemaXmlSerializer#doProcessTable():502) - $ spring-dbflute-db.PURCHASE(TABLE) // 購入: 一つの商品に対する一回の購入を表現する。...
+2019-03-10 17:57:26,244 [main] INFO  (DfSchemaXmlSerializer#doProcessTable():502) - $ spring-dbflute-db.PURCHASE_PAYMENT(TABLE) // 購入支払: 購入に対する支払。...
+2019-03-10 17:57:26,260 [main] INFO  (DfSchemaXmlSerializer#doProcessTable():502) - $ spring-dbflute-db.REGION(TABLE) // 地域: 主に会員の住所に対応する地域。...
+2019-03-10 17:57:26,281 [main] INFO  (DfSchemaXmlSerializer#doProcessTable():502) - $ spring-dbflute-db.SERVICE_RANK(TABLE) // サービスランク: 会員のサービスレベルを表現するランク。...
+2019-03-10 17:57:26,316 [main] INFO  (DfSchemaXmlSerializer#doProcessTable():502) - $ spring-dbflute-db.WITHDRAWAL_REASON(TABLE) // 退会理由: 会員に選ばせる定型的な退会理由のマスタ。
+2019-03-10 17:57:26,347 [main] INFO  (DfSchemaXmlSerializer#processTable():434) - $ 
+2019-03-10 17:57:26,348 [main] INFO  (DfSchemaXmlSerializer#processTable():435) - $ [Table Count]
+2019-03-10 17:57:26,348 [main] INFO  (DfSchemaXmlSerializer#processTable():436) - $ 16
+2019-03-10 17:57:26,349 [main] INFO  (DfSchemaXmlSerializer#processTable():437) - $ = = = = = = = = = =/
+2019-03-10 17:57:26,349 [main] INFO  (DfSchemaXmlSerializer#processTable():438) - 
+2019-03-10 17:57:26,351 [main] INFO  (DfSchemaXmlSerializer#processSequence():805) - ...Getting sequences
+2019-03-10 17:57:26,359 [main] INFO  (DfSchemaXmlSerializer#serialize():301) - ...Serializing XML:
+2019-03-10 17:57:26,364 [main] INFO  (DfSchemaXmlSerializer#serialize():302) -   filePath = ./schema/project-schema-spring-dbflute.xml
+2019-03-10 17:57:26,367 [main] INFO  (DfSchemaXmlSerializer#serialize():303) -   encoding = UTF-8
+2019-03-10 17:57:26,429 [main] INFO  (DfSchemaXmlSerializer#doLoadNextSchema():1550) - ...Loading next schema (schema diff process)
+2019-03-10 17:57:26,445 [main] INFO  (DTDResolver#resolveEntity():195) - ...Resolving XML by database.dtd in same package
+2019-03-10 17:57:26,597 [main] INFO  (DfSchemaXmlSerializer#doLoadNextSchema():1555) -  -> different from previous (schema diff)
+2019-03-10 17:57:26,599 [main] INFO  (DfSchemaXmlSerializer#doLoadNextSchema():1557) - ...Serializing schema-diff:
+2019-03-10 17:57:26,599 [main] INFO  (DfSchemaXmlSerializer#doLoadNextSchema():1558) -   filePath = ./schema/project-history-spring-dbflute.diffmap
+2019-03-10 17:57:26,614 [main] INFO  (DfDataSourceHandler#destroy():120) - ...closeReally()
+2019-03-10 17:57:26,629 [main] INFO  (DfDBFluteTaskUtil#logFinalMessage():139) - 
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+[Final Message]: 00m01s536ms
+
+  DBFLUTE_CLIENT: {spring-dbflute}
+    database  = mysql (MySQL 5.7.12)
+    language  = java
+    container = spring
+    package   = org.docksidestage.dbflute
+
+  DBFLUTE_ENVIRONMENT_TYPE: {}
+    driver = com.mysql.jdbc.Driver
+    url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+    schema = {spring-dbflute-db.$$NoNameSchema$$ as main}
+    user   = spring-dbflute-user
+    props  = {}
+    additionalSchema = 
+    repsEnvType      = ut
+    refreshProject   = $$AutoDetect$$
+_/_/_/_/_/_/_/_/_/_/ {JDBC}
+2019-03-10 17:57:27,740 [main] INFO  (TorqueDocumentationTask#begin():187) - +------------------------------------------+
+2019-03-10 17:57:27,742 [main] INFO  (TorqueDocumentationTask#begin():188) - |                                          |
+2019-03-10 17:57:27,742 [main] INFO  (TorqueDocumentationTask#begin():189) - |                   Doc                    |
+2019-03-10 17:57:27,742 [main] INFO  (TorqueDocumentationTask#begin():197) - |                                          |
+2019-03-10 17:57:27,743 [main] INFO  (TorqueDocumentationTask#begin():198) - +------------------------------------------+
+2019-03-10 17:57:27,810 [main] INFO  (DfDataSourceHandler#prepare():78) - ...Preparing data source:
+2019-03-10 17:57:27,812 [main] INFO  (DfDataSourceHandler#prepare():79) -   driver = com.mysql.jdbc.Driver
+2019-03-10 17:57:27,813 [main] INFO  (DfDataSourceHandler#prepare():80) -   url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+2019-03-10 17:57:27,813 [main] INFO  (DfDataSourceHandler#prepare():81) -   user   = spring-dbflute-user
+2019-03-10 17:57:27,816 [main] INFO  (TorqueDocumentationTask#processSchemaHtml():259) - 
+2019-03-10 17:57:27,816 [main] INFO  (TorqueDocumentationTask#processSchemaHtml():260) - * * * * * * * * * * *
+2019-03-10 17:57:27,817 [main] INFO  (TorqueDocumentationTask#processSchemaHtml():261) - *                   *
+2019-03-10 17:57:27,817 [main] INFO  (TorqueDocumentationTask#processSchemaHtml():262) - *    Schema HTML    *
+2019-03-10 17:57:27,817 [main] INFO  (TorqueDocumentationTask#processSchemaHtml():263) - *                   *
+2019-03-10 17:57:27,817 [main] INFO  (TorqueDocumentationTask#processSchemaHtml():264) - * * * * * * * * * * *
+2019-03-10 17:57:27,992 [main] INFO  (DTDResolver#resolveEntity():195) - ...Resolving XML by database.dtd in same package
+2019-03-10 17:57:28,084 [main] INFO  (DfAbstractTexenTask#fireVelocityProcess():253) - generator.parse("doc/ControlDocument.vm", ctx);
+2019-03-10 17:57:28,318 [main] INFO  (Database#doEnableDocumentOutputDirectory():1226) - ...Setting up documentOutputDirectory: ./output/doc
+2019-03-10 17:57:28,328 [main] INFO  (DfAdditionalPrimaryKeyInitializer#initializeAdditionalPrimaryKey():62) - /=======================================
+2019-03-10 17:57:28,329 [main] INFO  (DfAdditionalPrimaryKeyInitializer#initializeAdditionalPrimaryKey():63) - ...Initializing additional primary keys.
+2019-03-10 17:57:28,330 [main] INFO  (DfAdditionalPrimaryKeyInitializer#initializeAdditionalPrimaryKey():88) - ==========/
+2019-03-10 17:57:28,332 [main] INFO  (DfAdditionalUniqueKeyInitializer#initializeAdditionalUniqueKey():62) - /=======================================
+2019-03-10 17:57:28,332 [main] INFO  (DfAdditionalUniqueKeyInitializer#initializeAdditionalUniqueKey():63) - ...Initializing additional unique keys.
+2019-03-10 17:57:28,333 [main] INFO  (DfAdditionalUniqueKeyInitializer#initializeAdditionalUniqueKey():83) - ==========/
+2019-03-10 17:57:28,338 [main] INFO  (DfAdditionalForeignKeyInitializer#initializeAdditionalForeignKey():68) - /=======================================
+2019-03-10 17:57:28,339 [main] INFO  (DfAdditionalForeignKeyInitializer#initializeAdditionalForeignKey():69) - ...Initializing additional foreign keys.
+2019-03-10 17:57:28,342 [main] INFO  (DfAdditionalForeignKeyInitializer#initializeAdditionalForeignKey():88) - ==========/
+2019-03-10 17:57:28,354 [main] INFO  (DfDocumentSelector#doLoadSchemaHistory():233) - ...Loading schema history
+2019-03-10 17:57:28,393 [main] INFO  (DfDocumentSelector#doLoadSchemaHistory():237) -  -> found history: count=1
+2019-03-10 17:57:28,460 [main] INFO  (DfSchemaHtmlDataArrangeQuery#getArrangeQueryTableMap():50) -  
+2019-03-10 17:57:28,460 [main] INFO  (DfSchemaHtmlDataArrangeQuery#getArrangeQueryTableMap():51) - ...Setting up arrange queries for documents (ArrangeQueryDoc)
+2019-03-10 17:57:28,519 [main] INFO  (DfArrangeQueryDocSetupper#doExtractArrangeQuery():106) -  -> no arrange query
+2019-03-10 17:57:28,969 [main] INFO  (DfRefreshMan#resolveProjectAutoDetect():105) - *Cannot auto-detect your refresh Eclipse proejct.
+2019-03-10 17:57:28,974 [main] INFO  (DfRefreshResourceProcess#show():299) - /===========================================================================
+2019-03-10 17:57:28,974 [main] INFO  (DfRefreshResourceProcess#show():299) - ...Refreshing [$$AutoDetect$$] by http://localhost:8386/
+2019-03-10 17:57:28,991 [main] INFO  (DfRefreshResourceProcess#show():299) - ...Retrying refreshing by default secondary URL http://localhost:8387/
+2019-03-10 17:57:28,994 [main] INFO  (DfRefreshResourceProcess#show():299) - Look! Read the message below.
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Failed to refresh the resources.
+
+[Project List]
+[$$AutoDetect$$]
+
+[Request URL]
+http://localhost:8386/
+
+[IOExpception]
+ConnectException
+Connection refused
+* * * * * * * * * */
+2019-03-10 17:57:28,994 [main] INFO  (DfRefreshResourceProcess#show():299) - ==========/
+2019-03-10 17:57:28,999 [main] INFO  (DfDBFluteTaskUtil#logFinalMessage():139) - 
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+[Final Message]: 00m01s277ms
+
+  DBFLUTE_CLIENT: {spring-dbflute}
+    database  = mysql
+    language  = java
+    container = spring
+    package   = org.docksidestage.dbflute
+
+  DBFLUTE_ENVIRONMENT_TYPE: {}
+    driver = com.mysql.jdbc.Driver
+    url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+    schema = {spring-dbflute-db.$$NoNameSchema$$ as main}
+    user   = spring-dbflute-user
+    props  = {}
+    additionalSchema = 
+    repsEnvType      = ut
+    refreshProject   = $$AutoDetect$$
+_/_/_/_/_/_/_/_/_/_/ {Doc}
+2019-03-10 17:57:31,325 [main] INFO  (TorqueDataModelTask#begin():110) - +------------------------------------------+
+2019-03-10 17:57:31,327 [main] INFO  (TorqueDataModelTask#begin():111) - |                                          |
+2019-03-10 17:57:31,327 [main] INFO  (TorqueDataModelTask#begin():112) - |                 Generate                 |
+2019-03-10 17:57:31,327 [main] INFO  (TorqueDataModelTask#begin():113) - |                                          |
+2019-03-10 17:57:31,327 [main] INFO  (TorqueDataModelTask#begin():114) - +------------------------------------------+
+2019-03-10 17:57:31,499 [main] INFO  (DfDataSourceHandler#prepare():78) - ...Preparing data source:
+2019-03-10 17:57:31,500 [main] INFO  (DfDataSourceHandler#prepare():79) -   driver = com.mysql.jdbc.Driver
+2019-03-10 17:57:31,500 [main] INFO  (DfDataSourceHandler#prepare():80) -   url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+2019-03-10 17:57:31,500 [main] INFO  (DfDataSourceHandler#prepare():81) -   user   = spring-dbflute-user
+2019-03-10 17:57:31,512 [main] INFO  (TorqueDataModelTask#setupControlTemplate():166) - 
+2019-03-10 17:57:31,513 [main] INFO  (TorqueDataModelTask#setupControlTemplate():167) - ...Using Java control: om/ControlGenerateJava.vm
+2019-03-10 17:57:31,551 [main] INFO  (DTDResolver#resolveEntity():195) - ...Resolving XML by database.dtd in same package
+2019-03-10 17:57:31,619 [main] INFO  (DfAbstractTexenTask#fireVelocityProcess():253) - generator.parse("om/ControlGenerateJava.vm", ctx);
+2019-03-10 17:57:31,883 [main] INFO  (Database#doEnableGenerateOutputDirectory():1194) - ...Setting up generateOutputDirectory: ../src/main/java
+2019-03-10 17:57:31,888 [main] INFO  (DfAdditionalPrimaryKeyInitializer#initializeAdditionalPrimaryKey():62) - /=======================================
+2019-03-10 17:57:31,888 [main] INFO  (DfAdditionalPrimaryKeyInitializer#initializeAdditionalPrimaryKey():63) - ...Initializing additional primary keys.
+2019-03-10 17:57:31,892 [main] INFO  (DfAdditionalPrimaryKeyInitializer#initializeAdditionalPrimaryKey():88) - ==========/
+2019-03-10 17:57:31,893 [main] INFO  (DfAdditionalUniqueKeyInitializer#initializeAdditionalUniqueKey():62) - /=======================================
+2019-03-10 17:57:31,894 [main] INFO  (DfAdditionalUniqueKeyInitializer#initializeAdditionalUniqueKey():63) - ...Initializing additional unique keys.
+2019-03-10 17:57:31,895 [main] INFO  (DfAdditionalUniqueKeyInitializer#initializeAdditionalUniqueKey():83) - ==========/
+2019-03-10 17:57:31,897 [main] INFO  (DfAdditionalForeignKeyInitializer#initializeAdditionalForeignKey():68) - /=======================================
+2019-03-10 17:57:31,897 [main] INFO  (DfAdditionalForeignKeyInitializer#initializeAdditionalForeignKey():69) - ...Initializing additional foreign keys.
+2019-03-10 17:57:31,899 [main] INFO  (DfAdditionalForeignKeyInitializer#initializeAdditionalForeignKey():88) - ==========/
+2019-03-10 17:57:31,912 [main] INFO  (DfIncludeQueryInitializer#initializeIncludeQuery():58) - /=============================
+2019-03-10 17:57:31,913 [main] INFO  (DfIncludeQueryInitializer#initializeIncludeQuery():59) - ...Initializing include query.
+2019-03-10 17:57:31,913 [main] INFO  (DfIncludeQueryInitializer#checkQueryMap():81) - String
+2019-03-10 17:57:31,913 [main] INFO  (DfIncludeQueryInitializer#checkQueryMap():81) - Number
+2019-03-10 17:57:31,914 [main] INFO  (DfIncludeQueryInitializer#checkQueryMap():81) - Date
+2019-03-10 17:57:31,914 [main] INFO  (DfIncludeQueryInitializer#checkQueryMap():86) -   NotEqual -> []
+2019-03-10 17:57:31,914 [main] INFO  (DfIncludeQueryInitializer#checkQueryMap():86) -   InScope -> []
+2019-03-10 17:57:31,914 [main] INFO  (DfIncludeQueryInitializer#checkQueryMap():86) -   NotInScope -> []
+2019-03-10 17:57:31,915 [main] INFO  (DfIncludeQueryInitializer#checkQueryMap():81) - OrderBy
+2019-03-10 17:57:31,915 [main] INFO  (DfIncludeQueryInitializer#initializeIncludeQuery():61) - ========/
+2019-03-10 17:57:31,941 [main] INFO  (Database#info():2807) - public void parseAllCommon() {
+2019-03-10 17:57:31,945 [main] INFO  (Database#info():2807) -     parse('DBCurrent');
+2019-03-10 17:57:31,954 [main] INFO  (Database#info():2807) -     parse('DBFluteConfig');
+2019-03-10 17:57:31,979 [main] INFO  (Database#info():2807) -     parse('DBFluteInitializer');
+2019-03-10 17:57:31,995 [main] INFO  (Database#info():2807) -     parse('DBMetaInstanceHandler');
+2019-03-10 17:57:32,042 [main] INFO  (Database#info():2807) -     parse('EntityDefinedCommonColumn');
+2019-03-10 17:57:32,048 [main] INFO  (Database#info():2807) -     parse('ImplementedBehaviorSelector');
+2019-03-10 17:57:32,054 [main] INFO  (Database#info():2807) -     parse('ImplementedCommonColumnAutoSetupper');
+2019-03-10 17:57:32,122 [main] INFO  (Database#info():2807) -     parse('ImplementedInvokerAssistant');
+2019-03-10 17:57:32,138 [main] INFO  (Database#info():2807) -     parse('ImplementedSqlClauseCreator');
+2019-03-10 17:57:32,143 [main] INFO  (Database#info():2807) - }
+2019-03-10 17:57:32,146 [main] INFO  (Database#info():2807) - public void parseContainerConfig() {
+2019-03-10 17:57:32,148 [main] INFO  (Database#info():2807) -     parse('org/docksidestage/dbflute/allcommon/DBFluteBeansJavaConfig.java')
+2019-03-10 17:57:32,195 [main] INFO  (Database#info():2807) - }
+2019-03-10 17:57:32,207 [main] INFO  (DfOldClassHandler#info():1045) - public void deleteOldTableClass() {
+2019-03-10 17:57:32,268 [main] INFO  (DfOldClassHandler#info():1045) - }
+2019-03-10 17:57:32,275 [main] INFO  (Database#info():2807) - public void parseTableClass() {
+2019-03-10 17:57:32,277 [main] INFO  (Database#info():2807) -     parse('MEMBER');
+2019-03-10 17:57:32,778 [main] INFO  (Database#info():2807) -     parse('MEMBER_ADDRESS');
+2019-03-10 17:57:33,046 [main] INFO  (Database#info():2807) -     parse('MEMBER_FOLLOWING');
+2019-03-10 17:57:33,269 [main] INFO  (Database#info():2807) -     parse('MEMBER_LOGIN');
+2019-03-10 17:57:33,456 [main] INFO  (Database#info():2807) -     parse('MEMBER_SECURITY');
+2019-03-10 17:57:33,607 [main] INFO  (Database#info():2807) -     parse('MEMBER_SERVICE');
+2019-03-10 17:57:33,812 [main] INFO  (Database#info():2807) -     parse('MEMBER_STATUS');
+2019-03-10 17:57:33,963 [main] INFO  (Database#info():2807) -     parse('MEMBER_WITHDRAWAL');
+2019-03-10 17:57:34,104 [main] INFO  (Database#info():2807) -     parse('PRODUCT');
+2019-03-10 17:57:34,287 [main] INFO  (Database#info():2807) -     parse('PRODUCT_CATEGORY');
+2019-03-10 17:57:34,423 [main] INFO  (Database#info():2807) -     parse('PRODUCT_STATUS');
+2019-03-10 17:57:34,542 [main] INFO  (Database#info():2807) -     parse('PURCHASE');
+2019-03-10 17:57:34,714 [main] INFO  (Database#info():2807) -     parse('PURCHASE_PAYMENT');
+2019-03-10 17:57:34,880 [main] INFO  (Database#info():2807) -     parse('REGION');
+2019-03-10 17:57:35,022 [main] INFO  (Database#info():2807) -     parse('SERVICE_RANK');
+2019-03-10 17:57:35,158 [main] INFO  (Database#info():2807) -     parse('WITHDRAWAL_REASON');
+2019-03-10 17:57:35,309 [main] INFO  (Database#info():2807) - }
+2019-03-10 17:57:35,309 [main] INFO  (Database#info():2807) -  
+2019-03-10 17:57:35,390 [main] INFO  (DfRefreshMan#resolveProjectAutoDetect():105) - *Cannot auto-detect your refresh Eclipse proejct.
+2019-03-10 17:57:35,392 [main] INFO  (DfRefreshResourceProcess#show():299) - /===========================================================================
+2019-03-10 17:57:35,392 [main] INFO  (DfRefreshResourceProcess#show():299) - ...Refreshing [$$AutoDetect$$] by http://localhost:8386/
+2019-03-10 17:57:35,393 [main] INFO  (DfRefreshResourceProcess#show():299) - ...Retrying refreshing by default secondary URL http://localhost:8387/
+2019-03-10 17:57:35,394 [main] INFO  (DfRefreshResourceProcess#show():299) - Look! Read the message below.
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Failed to refresh the resources.
+
+[Project List]
+[$$AutoDetect$$]
+
+[Request URL]
+http://localhost:8386/
+
+[IOExpception]
+ConnectException
+Connection refused
+* * * * * * * * * */
+2019-03-10 17:57:35,395 [main] INFO  (DfRefreshResourceProcess#show():299) - ==========/
+2019-03-10 17:57:35,399 [main] INFO  (DfDBFluteTaskUtil#logFinalMessage():139) - 
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+[Final Message]: 00m04s088ms
+
+  DBFLUTE_CLIENT: {spring-dbflute}
+    database  = mysql
+    language  = java
+    container = spring
+    package   = org.docksidestage.dbflute
+
+  DBFLUTE_ENVIRONMENT_TYPE: {}
+    driver = com.mysql.jdbc.Driver
+    url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+    schema = {spring-dbflute-db.$$NoNameSchema$$ as main}
+    user   = spring-dbflute-user
+    props  = {}
+    additionalSchema = 
+    repsEnvType      = ut
+    refreshProject   = $$AutoDetect$$
+_/_/_/_/_/_/_/_/_/_/ {Generate}
+2019-03-10 17:57:36,224 [main] INFO  (DfOutsideSqlTestTask#begin():77) - +------------------------------------------+
+2019-03-10 17:57:36,228 [main] INFO  (DfOutsideSqlTestTask#begin():78) - |                                          |
+2019-03-10 17:57:36,229 [main] INFO  (DfOutsideSqlTestTask#begin():79) - |              OutsideSqlTest              |
+2019-03-10 17:57:36,230 [main] INFO  (DfOutsideSqlTestTask#begin():80) - |                                          |
+2019-03-10 17:57:36,230 [main] INFO  (DfOutsideSqlTestTask#begin():81) - +------------------------------------------+
+2019-03-10 17:57:36,265 [main] INFO  (DfDataSourceHandler#prepare():78) - ...Preparing data source:
+2019-03-10 17:57:36,265 [main] INFO  (DfDataSourceHandler#prepare():79) -   driver = com.mysql.jdbc.Driver
+2019-03-10 17:57:36,266 [main] INFO  (DfDataSourceHandler#prepare():80) -   url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+2019-03-10 17:57:36,266 [main] INFO  (DfDataSourceHandler#prepare():81) -   user   = spring-dbflute-user
+2019-03-10 17:57:36,296 [main] INFO  (DfSqlFileFireMan#fire():93) - {Fired SQL}: success=0 failure=0 (in 0 files)
+2019-03-10 17:57:36,305 [main] INFO  (DfDBFluteTaskUtil#logFinalMessage():139) - 
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+[Final Message]: 00m00s096ms
+
+  DBFLUTE_CLIENT: {spring-dbflute}
+    database  = mysql
+    language  = java
+    container = spring
+    package   = org.docksidestage.dbflute
+
+  DBFLUTE_ENVIRONMENT_TYPE: {}
+    driver = com.mysql.jdbc.Driver
+    url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+    schema = {spring-dbflute-db.$$NoNameSchema$$ as main}
+    user   = spring-dbflute-user
+    props  = {}
+    additionalSchema = 
+    repsEnvType      = ut
+    refreshProject   = $$AutoDetect$$
+
+ {Checked SQL}
+_/_/_/_/_/_/_/_/_/_/ {OutsideSqlTest}
+2019-03-10 17:57:37,026 [main] INFO  (DfSql2EntityTask#begin():106) - +------------------------------------------+
+2019-03-10 17:57:37,029 [main] INFO  (DfSql2EntityTask#begin():107) - |                                          |
+2019-03-10 17:57:37,030 [main] INFO  (DfSql2EntityTask#begin():108) - |                Sql2Entity                |
+2019-03-10 17:57:37,030 [main] INFO  (DfSql2EntityTask#begin():109) - |                                          |
+2019-03-10 17:57:37,031 [main] INFO  (DfSql2EntityTask#begin():110) - +------------------------------------------+
+2019-03-10 17:57:37,056 [main] INFO  (DfDataSourceHandler#prepare():78) - ...Preparing data source:
+2019-03-10 17:57:37,056 [main] INFO  (DfDataSourceHandler#prepare():79) -   driver = com.mysql.jdbc.Driver
+2019-03-10 17:57:37,056 [main] INFO  (DfDataSourceHandler#prepare():80) -   url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+2019-03-10 17:57:37,057 [main] INFO  (DfDataSourceHandler#prepare():81) -   user   = spring-dbflute-user
+2019-03-10 17:57:37,073 [main] INFO  (DfSql2EntityTask#setupControlTemplate():177) - 
+2019-03-10 17:57:37,073 [main] INFO  (DfSql2EntityTask#setupControlTemplate():178) - ...Using Java control: om/ControlSql2EntityJava.vm
+2019-03-10 17:57:37,083 [main] INFO  (DTDResolver#resolveEntity():195) - ...Resolving XML by database.dtd in same package
+2019-03-10 17:57:37,204 [main] INFO  (DfSqlFileFireMan#fire():93) - {Fired SQL}: success=0 failure=0 (in 0 files)
+2019-03-10 17:57:37,264 [main] INFO  (DfSql2EntityTask#initControlContext():311) - 
+2019-03-10 17:57:37,264 [main] INFO  (DfSql2EntityTask#initControlContext():312) - ...Preparing generation of customize-entities and parameter-beans
+2019-03-10 17:57:37,264 [main] INFO  (DfSql2EntityTask#initControlContext():313) - * * * * * * * * * *
+2019-03-10 17:57:37,265 [main] INFO  (DfSql2EntityTask#initControlContext():314) - * CustomizeEntity *
+2019-03-10 17:57:37,265 [main] INFO  (DfSql2EntityTask#initControlContext():315) - * * * * * * * * * *
+2019-03-10 17:57:37,265 [main] INFO  (DfSql2EntityTask#showParameterBean():932) - * * * * * * * * *
+2019-03-10 17:57:37,265 [main] INFO  (DfSql2EntityTask#showParameterBean():933) - * ParameterBean *
+2019-03-10 17:57:37,265 [main] INFO  (DfSql2EntityTask#showParameterBean():934) - * * * * * * * * *
+2019-03-10 17:57:37,268 [main] INFO  (DfAbstractTexenTask#fireVelocityProcess():253) - generator.parse("om/ControlSql2EntityJava.vm", ctx);
+2019-03-10 17:57:37,423 [main] INFO  (Database#doEnableSql2EntityOutputDirectory():1210) - ...Setting up sql2EntityOutputDirectory: ../src/main/java
+2019-03-10 17:57:37,425 [main] INFO  (DfOldClassHandler#info():1045) - public void deleteOldCustomizeClass() {
+2019-03-10 17:57:37,437 [main] INFO  (DfOldClassHandler#info():1045) - }
+2019-03-10 17:57:37,437 [main] INFO  (Database#info():2807) - public void parseCustomizeEntity() {
+2019-03-10 17:57:37,439 [main] INFO  (Database#info():2807) - }
+2019-03-10 17:57:37,450 [main] INFO  (DfSql2EntityTask#showTargetSqlFileInformation():303) - 
+/- - - - - - - - - - - - - - - - - - - - - - - -
+Target SQL files: 0
+
+- - - - - - - - - -/
+2019-03-10 17:57:37,452 [main] INFO  (DfRefreshMan#resolveProjectAutoDetect():105) - *Cannot auto-detect your refresh Eclipse proejct.
+2019-03-10 17:57:37,454 [main] INFO  (DfRefreshResourceProcess#show():299) - /===========================================================================
+2019-03-10 17:57:37,454 [main] INFO  (DfRefreshResourceProcess#show():299) - ...Refreshing [$$AutoDetect$$] by http://localhost:8386/
+2019-03-10 17:57:37,455 [main] INFO  (DfRefreshResourceProcess#show():299) - ...Retrying refreshing by default secondary URL http://localhost:8387/
+2019-03-10 17:57:37,457 [main] INFO  (DfRefreshResourceProcess#show():299) - Look! Read the message below.
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Failed to refresh the resources.
+
+[Project List]
+[$$AutoDetect$$]
+
+[Request URL]
+http://localhost:8386/
+
+[IOExpception]
+ConnectException
+Connection refused
+* * * * * * * * * */
+2019-03-10 17:57:37,457 [main] INFO  (DfRefreshResourceProcess#show():299) - ==========/
+2019-03-10 17:57:37,471 [main] INFO  (DfDBFluteTaskUtil#logFinalMessage():139) - 
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+[Final Message]: 00m00s454ms
+
+  DBFLUTE_CLIENT: {spring-dbflute}
+    database  = mysql
+    language  = java
+    container = spring
+    package   = org.docksidestage.dbflute
+
+  DBFLUTE_ENVIRONMENT_TYPE: {}
+    driver = com.mysql.jdbc.Driver
+    url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+    schema = {spring-dbflute-db.$$NoNameSchema$$ as main}
+    user   = spring-dbflute-user
+    props  = {}
+    additionalSchema = 
+    repsEnvType      = ut
+    refreshProject   = $$AutoDetect$$
+_/_/_/_/_/_/_/_/_/_/ {Sql2Entity}
+2019-03-14 08:52:41,674 [main] INFO  (DfIntroTask#begin():52) - +------------------------------------------+
+2019-03-14 08:52:41,681 [main] INFO  (DfIntroTask#begin():53) - |                                          |
+2019-03-14 08:52:41,683 [main] INFO  (DfIntroTask#begin():54) - |                   Intro                  |
+2019-03-14 08:52:41,683 [main] INFO  (DfIntroTask#begin():55) - |                                          |
+2019-03-14 08:52:41,684 [main] INFO  (DfIntroTask#begin():56) - +------------------------------------------+
+2019-03-14 08:52:41,916 [main] INFO  (DfAbstractTask#preparePublicProperties():280) - ...Loading http://dbflute.org/meta/public.properties
+2019-03-14 08:52:42,646 [main] INFO  (DfIntroTask#doExecute():79) - *The jar file of DBFlute Intro already exists: ../dbflute-intro.jar
+2019-03-14 08:52:42,715 [main] INFO  (DfDBFluteTaskUtil#logFinalMessage():139) - 
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+[Final Message]: 00m00s974ms
+
+  DBFLUTE_CLIENT: {spring-dbflute}
+    database  = mysql
+    language  = java
+    container = spring
+    package   = org.docksidestage.dbflute
+
+  DBFLUTE_ENVIRONMENT_TYPE: {}
+    driver = com.mysql.jdbc.Driver
+    url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+    schema = {spring-dbflute-db.$$NoNameSchema$$ as main}
+    user   = spring-dbflute-user
+    props  = {}
+    additionalSchema = 
+    repsEnvType      = ut
+    refreshProject   = $$AutoDetect$$
+_/_/_/_/_/_/_/_/_/_/ {df-intro}
+2019-03-14 08:54:06,482 [main] INFO  (DfIntroTask#begin():52) - +------------------------------------------+
+2019-03-14 08:54:06,490 [main] INFO  (DfIntroTask#begin():53) - |                                          |
+2019-03-14 08:54:06,492 [main] INFO  (DfIntroTask#begin():54) - |                   Intro                  |
+2019-03-14 08:54:06,492 [main] INFO  (DfIntroTask#begin():55) - |                                          |
+2019-03-14 08:54:06,492 [main] INFO  (DfIntroTask#begin():56) - +------------------------------------------+
+2019-03-14 08:54:06,612 [main] INFO  (DfAbstractTask#preparePublicProperties():280) - ...Loading http://dbflute.org/meta/public.properties
+2019-03-14 08:54:07,389 [main] INFO  (DfIntroTask#doExecute():79) - *The jar file of DBFlute Intro already exists: ../dbflute-intro.jar
+2019-03-14 08:54:07,409 [main] INFO  (DfDBFluteTaskUtil#logFinalMessage():139) - 
+_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
+[Final Message]: 00m00s909ms
+
+  DBFLUTE_CLIENT: {spring-dbflute}
+    database  = mysql
+    language  = java
+    container = spring
+    package   = org.docksidestage.dbflute
+
+  DBFLUTE_ENVIRONMENT_TYPE: {}
+    driver = com.mysql.jdbc.Driver
+    url    = jdbc:mysql://localhost:3309/spring-dbflute-db
+    schema = {spring-dbflute-db.$$NoNameSchema$$ as main}
+    user   = spring-dbflute-user
+    props  = {}
+    additionalSchema = 
+    repsEnvType      = ut
+    refreshProject   = $$AutoDetect$$
+_/_/_/_/_/_/_/_/_/_/ {df-intro}

@@ -1,0 +1,13 @@
+version: "3.6"
+services:
+  mysql:
+    container_name: spring-dbflute-mysql
+    build: mysql
+    ports:
+      - "3309:3306"
+    volumes:
+      - ./mysql/init:/docker-entrypoint-initdb.d # For Database initialize
+    environment:
+      MYSQL_DATABASE: spring-dbflute-db
+      MYSQL_USER: spring-dbflute-user
+      MYSQL_PASSWORD: password
